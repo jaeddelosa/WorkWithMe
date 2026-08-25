@@ -3826,6 +3826,44 @@
 </script>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script>
+/* Hero video watchdog — if the Mixkit hotlink is blocked or autoplay is refused,
+   swap in a gradient wash so the hero is never flat black. */
+(function () {
+    var wrap = document.querySelector('.hero-video-bg');
+    var vid  = wrap && wrap.querySelector('video');
+    if (!wrap || !vid) return;
+
+    function markFailed(why) {
+        wrap.classList.add('jd-video-failed');
+        console.warn('[hero] background video unavailable (' + why + '), using fallback wash');
+    }
+
+    vid.addEventListener('error', function () { markFailed('error event'); }, true);
+
+    // networkState 3 = NO_SOURCE, readyState 0 = nothing buffered
+    setTimeout(function () {
+        if (vid.networkState === 3 || vid.readyState === 0) {
+            markFailed('networkState ' + vid.networkState + ', readyState ' + vid.readyState);
+        }
+    }, 6000);
+
+    // Some browsers refuse autoplay until a gesture; nudge it once.
+    var p = vid.play();
+    if (p && p.catch) {
+        p.catch(function () {
+            var kick = function () {
+                vid.play().catch(function () {});
+                document.removeEventListener('click', kick);
+                document.removeEventListener('touchstart', kick);
+            };
+            document.addEventListener('click', kick, { once: true });
+            document.addEventListener('touchstart', kick, { once: true });
+        });
+    }
+})();
+</script>
+
 <!-- ══════════════════════════════════════════════════════════════════════════
      JaedGPT — chat widget (replaces the Jotform agent embed)
      Backend : Cloudflare Worker  https://test-ai.jaedd.workers.dev
@@ -3997,6 +4035,13 @@
     background:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 12' preserveAspectRatio='none'%3E%3Cpath d='M2,9 C58,4 118,11 178,6 C238,1 268,9 298,4' stroke='rgba(217,164,65,0.9)' stroke-width='3.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left bottom / 100% 6px;
 }
 .jdc-sub{ font-size:.78rem; color:var(--jdc-text-3); margin-top:7px; }
+.jdc-diag{
+    margin-top:8px; padding:7px 9px;
+    background:var(--jdc-bg); border:1px solid var(--jdc-ochre); border-radius:2px;
+    font-family:var(--jdc-display); font-size:.68rem; line-height:1.45;
+    color:var(--jdc-ochre);
+}
+.jdc-diag[hidden]{ display:none; }
 .jdc-head-actions{ display:flex; gap:4px; flex:none; }
 .jdc-icon{
     width:30px; height:30px;
@@ -4199,6 +4244,7 @@
                 <span class="jdc-eyebrow">AI assistant</span>
                 <span class="jdc-title">JaedGPT</span>
                 <div class="jdc-sub">Websites, SEO &amp; AEO, Google Ads, automation.</div>
+                <div class="jdc-diag" id="jdc-diag" hidden></div>
             </div>
             <div class="jdc-head-actions">
                 <button class="jdc-icon" id="jdc-reset" type="button" title="Start over" aria-label="Start over">
@@ -4485,13 +4531,20 @@
             method: 'POST',
             mode: 'cors',
             credentials: 'omit',
+            // text/plain keeps this a "simple" CORS request, so the browser sends
+            // NO preflight. The Worker's request.json() still parses it fine.
+            // That means the Worker only needs Access-Control-Allow-Origin — no
+            // OPTIONS handler required.
             headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json, text/plain, text/event-stream',
-                'X-Turnstile-Token': payload.turnstileToken || ''
+                'Content-Type': 'text/plain;charset=UTF-8'
             },
             body: JSON.stringify(payload),
             signal: signal
+        }).catch(function (e) {
+            // fetch() only rejects when the request never completed:
+            // CORS refusal, DNS failure, or genuinely offline.
+            console.error('[JaedGPT] request to ' + url + ' failed before a response arrived:', e);
+            throw { kind: navigator.onLine === false ? 'offline' : 'blocked', url: url };
         });
     }
 
@@ -4662,8 +4715,12 @@
                     fail(slot, "You're going faster than the limit allows. Give it a minute, then send again.");
                 } else if (kind === 'server') {
                     fail(slot, 'The assistant is down right now (error ' + err.code + '). Use the contact form below and Jaed will reply personally.');
+                } else if (kind === 'offline') {
+                    fail(slot, "You're offline. Reconnect and send again.");
+                } else if (kind === 'blocked') {
+                    fail(slot, "The request was blocked before it reached the assistant — usually a CORS setting on the Worker. Open the browser console for the exact error.");
                 } else {
-                    fail(slot, "Couldn't reach the assistant. Check your connection and send again.");
+                    fail(slot, "Couldn't reach the assistant. Open the browser console for details, or use the contact form below.");
                 }
             })
             .then(function () {
@@ -4683,7 +4740,31 @@
         launcher.setAttribute('aria-expanded', 'true');
         if (!log.children.length) greet();
         loadTurnstile().catch(function () {});   // warm up while they type
+        probe();
         setTimeout(function () { input.focus(); }, 180);
+    }
+
+    /* One-time reachability probe. Tells you WHICH side is broken, in the panel,
+       instead of making you read the network tab. */
+    var probed = false;
+    function probe() {
+        if (probed) return;
+        probed = true;
+        var diag = document.getElementById('jdc-diag');
+        if (!diag) return;
+
+        fetch(ORIGIN + '/', { method: 'GET', mode: 'cors', credentials: 'omit' })
+            .then(function (r) {
+                console.log('[JaedGPT] Worker reachable, CORS OK. Root status ' + r.status);
+            })
+            .catch(function (e) {
+                console.error('[JaedGPT] CORS PROBLEM. The Worker did not return ' +
+                    'Access-Control-Allow-Origin for ' + location.origin + '. Detail:', e);
+                diag.hidden = false;
+                diag.textContent = 'Setup needed: the Worker is not returning ' +
+                    'Access-Control-Allow-Origin for ' + location.origin +
+                    '. Add that origin in the Worker and redeploy.';
+            });
     }
 
     function close() {
@@ -5083,7 +5164,16 @@ nav{ height:74px; }
 }
 
 /* ── Hero ───────────────────────────────────────────────────────────────── */
-.hero-video-bg video{ opacity:.16; filter:grayscale(1) contrast(1.05) brightness(0.75); }
+.hero-video-bg video{ opacity:.34; filter:grayscale(.55) contrast(1.05) brightness(0.82); }
+/* If the Mixkit CDN blocks the hotlink, the hero still gets a moving-looking wash
+   instead of flat black. Applied by the watchdog script near the end of the file. */
+.hero-video-bg.jd-video-failed{
+    background:
+        radial-gradient(1100px 520px at 22% 18%, rgba(192,57,47,0.20), transparent 62%),
+        radial-gradient(900px 460px at 82% 72%, rgba(217,164,65,0.14), transparent 60%),
+        linear-gradient(160deg, #1E1B17 0%, #14120F 70%);
+}
+.hero-video-bg.jd-video-failed video{ display:none; }
 .hero-video-overlay{
     background:linear-gradient(180deg,rgba(20,18,15,.72) 0%,rgba(20,18,15,.90) 55%,var(--bg) 100%);
 }
