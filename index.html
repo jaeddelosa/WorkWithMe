@@ -3849,6 +3849,17 @@
         }
     }, 6000);
 
+    // Some browsers stall a decorative video when a new iframe mounts or the tab
+    // is backgrounded. Resume it whenever that happens while the page is visible.
+    vid.addEventListener('pause', function () {
+        if (!document.hidden && !wrap.classList.contains('jd-video-failed')) {
+            vid.play().catch(function () {});
+        }
+    });
+    document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) vid.play().catch(function () {});
+    });
+
     // Some browsers refuse autoplay until a gesture; nudge it once.
     var p = vid.play();
     if (p && p.catch) {
@@ -4008,6 +4019,8 @@
     overflow:hidden;
     opacity:0; visibility:hidden;
     transform:translateY(10px);
+    will-change:opacity, transform;
+    contain:paint;
     transition:opacity .22s ease, transform .22s ease, visibility .22s;
 }
 #jdchat.jdc-open .jdc-panel{ opacity:1; visibility:visible; transform:translateY(0); }
@@ -4740,9 +4753,21 @@
         root.dataset.state = 'open';
         launcher.setAttribute('aria-expanded', 'true');
         if (!log.children.length) greet();
-        loadTurnstile().catch(function () {});   // warm up while they type
-        probe();
+        // Turnstile mounts an iframe and the probe hits the network. Both are
+        // deferred to idle so the open animation and video playback stay smooth.
+        idle(function () {
+            loadTurnstile().catch(function () {});
+            probe();
+        });
         setTimeout(function () { input.focus(); }, 180);
+    }
+
+    function idle(fn) {
+        if (window.requestIdleCallback) {
+            requestIdleCallback(fn, { timeout: 1200 });
+        } else {
+            setTimeout(fn, 500);
+        }
     }
 
     /* One-time reachability probe. Tells you WHICH side is broken, in the panel,
@@ -5165,7 +5190,23 @@ nav{ height:74px; }
 }
 
 /* ── Hero ───────────────────────────────────────────────────────────────── */
-.hero-video-bg video{ opacity:.34; filter:grayscale(.55) contrast(1.05) brightness(0.82); }
+/* No CSS `filter` here on purpose. A filter on a <video> is recomputed on EVERY
+   frame, so any heavy paint elsewhere (chat panel opening, Turnstile iframe
+   mounting) makes playback stutter. The muted look now comes from opacity plus
+   the overlay gradient, which are free. */
+.hero-video-bg video{
+    /* ── Tune the hero video here ──
+       opacity .30 = barely-there texture · .48 = clearly visible (current)
+       .65 = footage is the feature. If the footage reads too blue against the
+       warm palette, add `filter:grayscale(.6)` back — but expect some cost. */
+    opacity:.48;
+    filter:none;
+    transform:translateZ(0);      /* own compositor layer */
+    will-change:transform;
+    backface-visibility:hidden;
+}
+/* Isolate the hero so painting the chat panel can't invalidate the video layer. */
+.hero-video-bg{ contain:paint; }
 /* If the Mixkit CDN blocks the hotlink, the hero still gets a moving-looking wash
    instead of flat black. Applied by the watchdog script near the end of the file. */
 .hero-video-bg.jd-video-failed{
@@ -5176,7 +5217,9 @@ nav{ height:74px; }
 }
 .hero-video-bg.jd-video-failed video{ display:none; }
 .hero-video-overlay{
-    background:linear-gradient(180deg,rgba(20,18,15,.72) 0%,rgba(20,18,15,.90) 55%,var(--bg) 100%);
+    /* Lighter at the top so the footage is actually visible, still opaque by the
+       bottom third where the body copy sits. */
+    background:linear-gradient(180deg,rgba(20,18,15,.52) 0%,rgba(20,18,15,.80) 58%,var(--bg) 100%);
 }
 .hero-content{ gap:64px; align-items:start; }
 
