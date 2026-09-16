@@ -4247,8 +4247,8 @@
 /* ── Panel ────────────────────────────────────────────────────────────── */
 .jdc-panel{
     position:absolute; bottom:0; right:0; left:auto;
-    width:400px;
-    height:min(620px, calc(100vh - 120px));
+    width:min(480px, calc(100vw - 48px));
+    height:min(760px, calc(100vh - 48px - var(--jdc-lift)));
     display:flex; flex-direction:column;
     background:var(--jdc-bg);
     border:1px solid var(--jdc-rule-2); border-radius:2px;
@@ -4259,11 +4259,33 @@
 }
 #jdchat.jdc-open .jdc-panel{ opacity:1; visibility:visible; transform:translateY(0); }
 
+/* backdrop, only used in expanded mode */
+.jdc-backdrop{
+    position:fixed; inset:0;
+    background:rgba(10,9,8,.72);
+    opacity:0; visibility:hidden;
+    transition:opacity .22s ease, visibility .22s;
+}
+#jdchat.jdc-open.jdc-big .jdc-backdrop{ opacity:1; visibility:visible; }
+
+/* expanded: large window in the middle of the screen */
+#jdchat.jdc-big .jdc-panel{
+    position:fixed;
+    top:50%; left:50%; right:auto; bottom:auto;
+    width:min(1000px, calc(100vw - 64px));
+    height:min(860px, calc(100vh - 64px));
+    transform:translate(-50%, -48%);
+}
+#jdchat.jdc-open.jdc-big .jdc-panel{ transform:translate(-50%, -50%); }
+.jdc-icon .jdc-shrink{ display:none; }
+#jdchat.jdc-big .jdc-icon .jdc-grow{ display:none; }
+#jdchat.jdc-big .jdc-icon .jdc-shrink{ display:block; }
+
 /* slim bar — the embedded page already carries its own header */
 .jdc-bar{
     flex:none;
     display:flex; align-items:center; justify-content:space-between; gap:10px;
-    padding:6px 6px 6px 14px;
+    padding:9px 8px 9px 14px;
     background:var(--jdc-bg-2);
     border-bottom:1px solid var(--jdc-rule);
 }
@@ -4273,6 +4295,12 @@
     color:var(--jdc-text-3);
 }
 .jdc-bar-title b{ color:var(--jdc-ochre); font-weight:600; }
+.jdc-bar-text{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+.jdc-bar-hint{
+    font-family:var(--jdc-prose);
+    font-size:.84rem; line-height:1.35;
+    color:var(--jdc-text);
+}
 .jdc-bar-actions{ display:flex; gap:2px; }
 .jdc-icon{
     width:30px; height:30px;
@@ -4324,7 +4352,9 @@
         left:0; right:0; top:0; bottom:0;
         width:auto; height:100%; height:100dvh;
         border:none;
+        transform:none !important;
     }
+    #jdc-expand, .jdc-backdrop{ display:none !important; }
     html.jdc-lock, html.jdc-lock body{ overflow:hidden; }
 }
 
@@ -4337,6 +4367,7 @@
 </style>
 
 <div id="jdchat">
+    <div class="jdc-backdrop" id="jdc-backdrop" aria-hidden="true"></div>
     <div class="jdc-teaser" id="jdc-teaser" role="button" tabindex="0" aria-label="Open chat">
         <button class="jdc-teaser-x" id="jdc-teaser-x" type="button" aria-label="Dismiss">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
@@ -4355,8 +4386,15 @@
 
     <div class="jdc-panel" id="jdc-panel" role="dialog" aria-modal="false" aria-label="Frontdesk chat">
         <div class="jdc-bar">
-            <span class="jdc-bar-title"><b>●</b>&nbsp; Frontdesk</span>
+            <div class="jdc-bar-text">
+                <span class="jdc-bar-title"><b>●</b>&nbsp; Frontdesk · online</span>
+                <span class="jdc-bar-hint">Tap a question below, or type your own at the bottom.</span>
+            </div>
             <div class="jdc-bar-actions">
+                <button class="jdc-icon" id="jdc-expand" type="button" title="Make bigger" aria-label="Make chat bigger" aria-pressed="false">
+                    <svg class="jdc-grow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+                    <svg class="jdc-shrink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14h6v6"/><path d="M20 10h-6V4"/><path d="M14 10l7-7"/><path d="M3 21l7-7"/></svg>
+                </button>
                 <a class="jdc-icon" href="https://chat.jaeddelosa.com/" target="_blank" rel="noopener" title="Open in new tab" aria-label="Open chat in a new tab">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>
                 </a>
@@ -4393,6 +4431,17 @@
     var loading  = document.getElementById('jdc-loading');
     var mobile   = window.matchMedia('(max-width:600px)');
     var opened   = false;
+    var expandBtn = document.getElementById('jdc-expand');
+    var backdrop  = document.getElementById('jdc-backdrop');
+
+    function setBig(on) {
+        root.classList.toggle('jdc-big', on);
+        expandBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        expandBtn.title = on ? 'Make smaller' : 'Make bigger';
+        expandBtn.setAttribute('aria-label', on ? 'Make chat smaller' : 'Make chat bigger');
+        if (on) document.documentElement.classList.add('jdc-lock');
+        else if (!mobile.matches) document.documentElement.classList.remove('jdc-lock');
+    }
 
     function store(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
     function recall(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
@@ -4418,6 +4467,10 @@
         opened = true;
         hideTeaser(true);
         loadFrame();
+        /* a corner panel is too tight on short or narrow desktop screens, so start big there */
+        var pref = recall('jdc-big');
+        var tight = window.innerHeight < 700 || window.innerWidth < 1100;
+        if (!mobile.matches) setBig(pref ? pref === '1' : tight);
         root.classList.add('jdc-open');
         launcher.setAttribute('aria-expanded', 'true');
         if (mobile.matches) document.documentElement.classList.add('jdc-lock');
@@ -4430,11 +4483,18 @@
         root.classList.remove('jdc-open');
         launcher.setAttribute('aria-expanded', 'false');
         document.documentElement.classList.remove('jdc-lock');
+        setTimeout(function () { if (!opened) root.classList.remove('jdc-big'); }, 250);
         launcher.focus();
     }
 
     launcher.addEventListener('click', open);
     closeBtn.addEventListener('click', close);
+    backdrop.addEventListener('click', close);
+    expandBtn.addEventListener('click', function () {
+        var on = !root.classList.contains('jdc-big');
+        setBig(on);
+        store('jdc-big', on ? '1' : '0');
+    });
 
     /* warm the connection when someone is about to open it */
     launcher.addEventListener('pointerenter', loadFrame, { once: true });
