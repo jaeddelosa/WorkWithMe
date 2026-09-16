@@ -4298,7 +4298,8 @@
     width:100%;
 }
 .jdc-bubble-head{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
-.jdc-bubble-head .jdc-avatar{ width:28px; height:28px; font-size:.7rem; }
+.jdc-avatar svg{ width:55%; height:55%; }
+.jdc-bubble-head .jdc-avatar{ width:28px; height:28px; }
 .jdc-bubble-head .jdc-avatar::after{ width:9px; height:9px; border-width:2px; }
 .jdc-bubble-name{ font-weight:600; font-size:.88rem; }
 .jdc-bubble-time{ font-size:.75rem; color:var(--c-muted); }
@@ -4487,12 +4488,12 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
             </button>
             <div class="jdc-bubble-head">
-                <span class="jdc-avatar" aria-hidden="true">JD</span>
-                <span class="jdc-bubble-name">Jaed</span>
+                <span class="jdc-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11 5.1V4h-1a1 1 0 0 1 0-2h4a1 1 0 1 1 0 2h-1v1.1A8 8 0 0 1 20 13v2H4v-2a8 8 0 0 1 7-7.9Z"/><rect x="2" y="16.5" width="20" height="2.5" rx="1.25"/></svg></span>
+                <span class="jdc-bubble-name">Frontdesk</span>
                 <span class="jdc-bubble-time">just now</span>
             </div>
             <span class="jdc-typing" aria-hidden="true"><i></i><i></i><i></i></span>
-            <p>Hi! Not sure where to start? Ask me anything about websites, Google, or automation.</p>
+            <p>Hi! I'm Jaed's Frontdesk. Not sure where to start? Ask me about websites, Google, or automation.</p>
         </div>
         <div class="jdc-replies">
             <button class="jdc-reply" type="button">I need a website</button>
@@ -4501,7 +4502,7 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
         </div>
     </div>
 
-    <button class="jdc-launcher" id="jdc-launcher" type="button" aria-label="Chat with Jaed, online now" aria-expanded="false" aria-controls="jdc-panel">
+    <button class="jdc-launcher" id="jdc-launcher" type="button" aria-label="Frontdesk chat, online now" aria-expanded="false" aria-controls="jdc-panel">
         <span class="jdc-l-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 3C6.9 3 3 6.6 3 11c0 2.2 1 4.2 2.6 5.6-.1 1.3-.6 2.6-1.5 3.6-.2.2 0 .6.3.6 1.9-.1 3.6-.8 4.8-1.8 1 .3 1.8.4 2.8.4 5.1 0 9-3.6 9-8S17.1 3 12 3Z"/>
@@ -4509,7 +4510,7 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
             </svg>
         </span>
         <span class="jdc-l-text" aria-hidden="true">
-            <strong>Chat with Jaed</strong>
+            <strong>Ask Frontdesk</strong>
             <small>Online now</small>
         </span>
         <span class="jdc-badge" aria-hidden="true">1</span>
@@ -4517,10 +4518,10 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
 
     <div class="jdc-panel" id="jdc-panel" role="dialog" aria-modal="false" aria-labelledby="jdc-name">
         <div class="jdc-head">
-            <span class="jdc-avatar" aria-hidden="true">JD</span>
+            <span class="jdc-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11 5.1V4h-1a1 1 0 0 1 0-2h4a1 1 0 1 1 0 2h-1v1.1A8 8 0 0 1 20 13v2H4v-2a8 8 0 0 1 7-7.9Z"/><rect x="2" y="16.5" width="20" height="2.5" rx="1.25"/></svg></span>
             <div class="jdc-who">
-                <div class="jdc-name" id="jdc-name">Chat with Jaed</div>
-                <div class="jdc-status">Online now</div>
+                <div class="jdc-name" id="jdc-name">Frontdesk</div>
+                <div class="jdc-status">Online now, Jaed's assistant</div>
             </div>
             <div class="jdc-actions">
                 <button class="jdc-btn" id="jdc-expand" type="button" title="Full view" aria-label="Full view" aria-pressed="false">
@@ -4540,7 +4541,7 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
                 <span></span><span></span><span></span>
                 <p class="jdc-slow">Still loading. <a href="https://chat.jaeddelosa.com/" target="_blank" rel="noopener">Open the chat in a new tab</a></p>
             </div>
-            <iframe class="jdc-frame" id="jdc-frame" title="Chat with Jaed"
+            <iframe class="jdc-frame" id="jdc-frame" title="Frontdesk chat"
                     data-src="https://chat.jaeddelosa.com/"
                     allow="clipboard-write" referrerpolicy="strict-origin-when-cross-origin"></iframe>
         </div>
@@ -4598,7 +4599,7 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
     function setUnread(on) {
         root.classList.toggle('jdc-unread', on);
         store('jdc-unread', on ? '1' : '0');
-        launcher.setAttribute('aria-label', on ? 'Chat with Jaed, 1 new message' : 'Chat with Jaed, online now');
+        launcher.setAttribute('aria-label', on ? 'Frontdesk chat, 1 new message' : 'Frontdesk chat, online now');
     }
 
     function open() {
