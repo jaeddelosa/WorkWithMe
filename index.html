@@ -4137,19 +4137,14 @@
 </script>
 
 <!-- ══════════════════════════════════════════════════════════════════════════
-     JaedGPT — chat widget (replaces the Jotform agent embed)
-     Backend : Cloudflare Worker  https://test-ai.jaedd.workers.dev
-     Gate    : Cloudflare Turnstile, sitekey 0x4AAAAAAEX_hkkt3xetFg3n
+     Frontdesk — chat widget (replaces the JaedGPT widget)
+     Source  : https://chat.jaeddelosa.com/  (embedded in an iframe)
      Notes   : Namespaced under #jdchat / .jdc-* with private --jdc-* tokens.
-               Anchored bottom-right; back-to-top and the music toggle are
-               restacked above it so the corner reads as one column.
+               The iframe only loads on first open, so it costs nothing on
+               page load. Anchored bottom-right; back-to-top and the music
+               toggle are restacked above it so the corner reads as one column.
      ══════════════════════════════════════════════════════════════════════════ -->
 <style>
-/* ── Shared corner stack ──────────────────────────────────────────────────
-   One column, bottom-right, from the bottom up:
-   chat launcher → back to top → music. All three ride the same lift value
-   so the sticky CTA never covers them.
-   ───────────────────────────────────────────────────────────────────────── */
 :root{ --jdc-lift:0px; }
 
 .back-to-top{
@@ -4164,11 +4159,10 @@
 }
 
 #jdchat{
-    /* mirrors the studio skin tokens, but privately scoped */
     --jdc-bg:#14120F; --jdc-bg-2:#191614; --jdc-panel:#1E1B17; --jdc-panel-2:#262119;
     --jdc-rule:#2E2822; --jdc-rule-2:#3A322A;
     --jdc-text:#E8E0D4; --jdc-text-2:#ADA294; --jdc-text-3:#7E7469;
-    --jdc-clay:#C0392F; --jdc-clay-soft:#D9705F; --jdc-ochre:#D9A441;
+    --jdc-clay:#C0392F; --jdc-ochre:#D9A441;
     --jdc-display:'Bricolage Grotesque','Syne',system-ui,sans-serif;
     --jdc-prose:'Newsreader',Georgia,serif;
 
@@ -4188,10 +4182,8 @@
     position:relative;
     display:inline-flex; align-items:center; gap:11px;
     padding:13px 20px 13px 16px;
-    background:var(--jdc-clay);
-    color:#FBF6EE;
-    border:1px solid var(--jdc-clay);
-    border-radius:2px;
+    background:var(--jdc-clay); color:#FBF6EE;
+    border:1px solid var(--jdc-clay); border-radius:2px;
     font-family:var(--jdc-display);
     font-weight:600; font-size:.95rem; letter-spacing:-.01em;
     cursor:pointer;
@@ -4201,61 +4193,48 @@
 .jdc-launcher:hover{ background:#A82F26; border-color:#A82F26; }
 .jdc-launcher:focus-visible{ outline:2px solid var(--jdc-ochre); outline-offset:3px; }
 .jdc-launcher svg{ width:18px; height:18px; flex:none; }
-.jdc-launcher .jdc-ping{
+.jdc-ping{
     width:6px; height:6px; border-radius:50%;
     background:var(--jdc-ochre); flex:none; margin-left:1px;
     animation:jdc-ping 2.6s ease-in-out infinite;
 }
 @keyframes jdc-ping{ 0%,100%{opacity:.35;} 50%{opacity:1;} }
-
-/* one ochre ring, three times, then it leaves you alone */
 .jdc-launcher::after{
-    content:'';
-    position:absolute; inset:-1px;
-    border:1px solid var(--jdc-ochre);
-    border-radius:2px;
-    opacity:0;
-    pointer-events:none;
+    content:''; position:absolute; inset:-1px;
+    border:1px solid var(--jdc-ochre); border-radius:2px;
+    opacity:0; pointer-events:none;
     animation:jdc-attn 2.2s ease-out 1.4s 3;
 }
 @keyframes jdc-attn{
     0%{ opacity:.85; transform:scale(1); }
-    70%{ opacity:0; transform:scale(1.26); }
-    100%{ opacity:0; transform:scale(1.26); }
+    70%,100%{ opacity:0; transform:scale(1.26); }
 }
 #jdchat.jdc-open .jdc-launcher{ opacity:0; pointer-events:none; }
 #jdchat.jdc-open .jdc-launcher::after{ animation:none; }
 
 /* ── Nudge ────────────────────────────────────────────────────────────── */
 .jdc-teaser{
-    position:absolute;
-    right:0; bottom:calc(100% + 12px);
+    position:absolute; right:0; bottom:calc(100% + 12px);
     width:272px;
     background:var(--jdc-panel);
-    border:1px solid var(--jdc-rule-2);
-    border-top:2px solid var(--jdc-clay);
+    border:1px solid var(--jdc-rule-2); border-top:2px solid var(--jdc-clay);
     border-radius:2px;
     box-shadow:0 16px 44px rgba(0,0,0,.5);
     padding:14px 34px 14px 15px;
-    text-align:left;
-    cursor:pointer;
+    text-align:left; cursor:pointer;
     opacity:0; visibility:hidden; transform:translateY(8px);
     transition:opacity .3s ease, transform .3s ease, visibility .3s;
 }
 .jdc-teaser.jdc-in{ opacity:1; visibility:visible; transform:translateY(0); }
 .jdc-teaser:hover{ border-color:var(--jdc-text-3); }
 .jdc-teaser-eyebrow{
-    display:block;
-    font-family:var(--jdc-display);
-    font-size:.58rem; font-weight:600;
-    letter-spacing:.18em; text-transform:uppercase;
-    color:var(--jdc-ochre);
-    margin-bottom:5px;
+    display:block; font-family:var(--jdc-display);
+    font-size:.58rem; font-weight:600; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--jdc-ochre); margin-bottom:5px;
 }
 .jdc-teaser p{ margin:0; font-size:.88rem; color:var(--jdc-text-2); }
 .jdc-teaser-x{
-    position:absolute; top:8px; right:8px;
-    width:20px; height:20px;
+    position:absolute; top:8px; right:8px; width:20px; height:20px;
     display:inline-flex; align-items:center; justify-content:center;
     background:none; border:none; border-radius:2px;
     color:var(--jdc-text-3); cursor:pointer;
@@ -4267,203 +4246,71 @@
 
 /* ── Panel ────────────────────────────────────────────────────────────── */
 .jdc-panel{
-    position:absolute;
-    bottom:0; right:0; left:auto;
-    width:392px;
-    height:min(578px, calc(100vh - 148px));
+    position:absolute; bottom:0; right:0; left:auto;
+    width:400px;
+    height:min(620px, calc(100vh - 120px));
     display:flex; flex-direction:column;
-    background:var(--jdc-panel);
-    border:1px solid var(--jdc-rule-2);
-    border-radius:2px;
+    background:var(--jdc-bg);
+    border:1px solid var(--jdc-rule-2); border-radius:2px;
     box-shadow:0 24px 70px rgba(0,0,0,.6);
     overflow:hidden;
-    opacity:0; visibility:hidden;
-    transform:translateY(10px);
-    will-change:opacity, transform;
-    contain:paint;
+    opacity:0; visibility:hidden; transform:translateY(10px);
     transition:opacity .22s ease, transform .22s ease, visibility .22s;
 }
 #jdchat.jdc-open .jdc-panel{ opacity:1; visibility:visible; transform:translateY(0); }
 
-/* ── Header ───────────────────────────────────────────────────────────── */
-.jdc-head{
+/* slim bar — the embedded page already carries its own header */
+.jdc-bar{
     flex:none;
-    display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
-    padding:16px 16px 14px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:6px 6px 6px 14px;
     background:var(--jdc-bg-2);
     border-bottom:1px solid var(--jdc-rule);
 }
-.jdc-eyebrow{
-    display:block;
+.jdc-bar-title{
     font-family:var(--jdc-display);
-    font-size:.6rem; font-weight:600;
-    letter-spacing:.18em; text-transform:uppercase;
-    color:var(--jdc-ochre);
-    margin-bottom:5px;
+    font-size:.62rem; font-weight:600; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--jdc-text-3);
 }
-.jdc-title{
-    font-family:var(--jdc-display);
-    font-size:1.06rem; font-weight:700; letter-spacing:-.025em;
-    color:var(--jdc-text);
-    padding-bottom:7px;
-    background:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 12' preserveAspectRatio='none'%3E%3Cpath d='M2,9 C58,4 118,11 178,6 C238,1 268,9 298,4' stroke='rgba(217,164,65,0.9)' stroke-width='3.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left bottom / 100% 6px;
-}
-.jdc-sub{ font-size:.78rem; color:var(--jdc-text-3); margin-top:7px; }
-.jdc-diag{
-    margin-top:8px; padding:7px 9px;
-    background:var(--jdc-bg); border:1px solid var(--jdc-ochre); border-radius:2px;
-    font-family:var(--jdc-display); font-size:.68rem; line-height:1.45;
-    color:var(--jdc-ochre);
-}
-.jdc-diag[hidden]{ display:none; }
-.jdc-head-actions{ display:flex; gap:4px; flex:none; }
+.jdc-bar-title b{ color:var(--jdc-ochre); font-weight:600; }
+.jdc-bar-actions{ display:flex; gap:2px; }
 .jdc-icon{
     width:30px; height:30px;
     display:inline-flex; align-items:center; justify-content:center;
     background:transparent; color:var(--jdc-text-3);
     border:1px solid transparent; border-radius:2px;
-    cursor:pointer; transition:color .16s ease, border-color .16s ease, background .16s ease;
+    cursor:pointer; text-decoration:none;
+    transition:color .16s ease, border-color .16s ease, background .16s ease;
 }
 .jdc-icon:hover{ color:var(--jdc-text); border-color:var(--jdc-rule-2); background:var(--jdc-panel-2); }
 .jdc-icon:focus-visible{ outline:2px solid var(--jdc-ochre); outline-offset:1px; }
 .jdc-icon svg{ width:15px; height:15px; }
 
-/* ── Transcript ───────────────────────────────────────────────────────── */
-.jdc-log{
-    flex:1 1 auto; min-height:0;
-    overflow-y:auto; overscroll-behavior:contain;
-    padding:18px 16px 4px;
-    scrollbar-width:thin; scrollbar-color:var(--jdc-rule-2) transparent;
+.jdc-frame-wrap{ position:relative; flex:1 1 auto; min-height:0; background:var(--jdc-bg); }
+.jdc-frame{
+    position:absolute; inset:0;
+    width:100%; height:100%; border:0; display:block;
+    background:var(--jdc-bg);
+    opacity:0; transition:opacity .25s ease;
 }
-.jdc-log::-webkit-scrollbar{ width:8px; }
-.jdc-log::-webkit-scrollbar-thumb{ background:var(--jdc-rule-2); border-radius:0; }
-.jdc-log::-webkit-scrollbar-track{ background:transparent; }
-
-.jdc-msg{ margin-bottom:18px; font-size:.94rem; }
-.jdc-msg .jdc-who{
-    font-family:var(--jdc-display);
-    font-size:.58rem; font-weight:600;
-    letter-spacing:.16em; text-transform:uppercase;
-    color:var(--jdc-text-3);
-    margin-bottom:6px;
+.jdc-frame.jdc-ready{ opacity:1; }
+.jdc-loading{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+    font-family:var(--jdc-display); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--jdc-text-3); text-align:center; padding:24px;
 }
-/* assistant: editorial, no bubble, hairline rule at the margin */
-.jdc-bot .jdc-body{
-    border-left:2px solid var(--jdc-clay);
-    padding-left:13px;
-    color:var(--jdc-text);
-}
-/* visitor: matte panel, right aligned */
-.jdc-user{ display:flex; flex-direction:column; align-items:flex-end; }
-.jdc-user .jdc-who{ text-align:right; }
-.jdc-user .jdc-body{
-    max-width:86%;
-    background:var(--jdc-panel-2);
-    border:1px solid var(--jdc-rule);
-    border-radius:2px;
-    padding:9px 13px;
-    color:var(--jdc-text);
-}
-.jdc-body p{ margin:0 0 9px; }
-.jdc-body p:last-child{ margin-bottom:0; }
-.jdc-body ul,.jdc-body ol{ margin:0 0 9px; padding-left:20px; }
-.jdc-body li{ margin-bottom:4px; }
-.jdc-body a{ color:var(--jdc-ochre); text-decoration:underline; text-underline-offset:2px; }
-.jdc-body a:hover{ color:var(--jdc-clay-soft); }
-.jdc-body strong{ color:var(--jdc-text); font-weight:700; }
-.jdc-body code{
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:.85em; background:var(--jdc-bg); border:1px solid var(--jdc-rule);
-    padding:1px 5px; border-radius:2px; color:var(--jdc-ochre);
-}
-.jdc-body pre{
-    background:var(--jdc-bg); border:1px solid var(--jdc-rule); border-radius:2px;
-    padding:10px 12px; overflow-x:auto; margin:0 0 9px;
-}
-.jdc-body pre code{ background:none; border:none; padding:0; color:var(--jdc-text-2); }
-
-.jdc-err .jdc-body{ border-left-color:var(--jdc-ochre); color:var(--jdc-text-2); }
-
-/* typing */
-.jdc-typing{ display:inline-flex; gap:5px; padding:4px 0; }
-.jdc-typing i{
-    width:5px; height:5px; border-radius:50%;
-    background:var(--jdc-text-3); display:block;
+.jdc-loading a{ color:var(--jdc-ochre); text-transform:none; letter-spacing:0; font-size:.85rem; }
+.jdc-dots{ display:inline-flex; gap:5px; }
+.jdc-dots i{
+    width:5px; height:5px; border-radius:50%; background:var(--jdc-text-3); display:block;
     animation:jdc-bounce 1.3s ease-in-out infinite;
 }
-.jdc-typing i:nth-child(2){ animation-delay:.16s; }
-.jdc-typing i:nth-child(3){ animation-delay:.32s; }
+.jdc-dots i:nth-child(2){ animation-delay:.16s; }
+.jdc-dots i:nth-child(3){ animation-delay:.32s; }
 @keyframes jdc-bounce{ 0%,60%,100%{opacity:.25; transform:translateY(0);} 30%{opacity:1; transform:translateY(-3px);} }
-
-/* starter chips */
-.jdc-chips{ display:flex; flex-wrap:wrap; gap:7px; margin:2px 0 18px; }
-.jdc-chip{
-    background:var(--jdc-bg-2);
-    border:1px solid var(--jdc-rule-2);
-    border-radius:2px;
-    color:var(--jdc-text-2);
-    font-family:var(--jdc-display);
-    font-size:.76rem; font-weight:500;
-    padding:7px 11px;
-    cursor:pointer; text-align:left;
-    transition:color .16s ease, border-color .16s ease, background .16s ease;
-}
-.jdc-chip:hover{ color:var(--jdc-text); border-color:var(--jdc-text-3); background:var(--jdc-panel-2); }
-.jdc-chip:focus-visible{ outline:2px solid var(--jdc-ochre); outline-offset:1px; }
-
-/* ── Composer ─────────────────────────────────────────────────────────── */
-.jdc-foot{
-    flex:none;
-    border-top:1px solid var(--jdc-rule);
-    background:var(--jdc-bg-2);
-    padding:12px 12px 9px;
-}
-.jdc-form{ display:flex; align-items:flex-end; gap:8px; }
-.jdc-input{
-    flex:1 1 auto;
-    resize:none;
-    max-height:112px;
-    min-height:42px;
-    padding:11px 12px;
-    background:var(--jdc-bg);
-    border:1px solid var(--jdc-rule-2);
-    border-radius:2px;
-    color:var(--jdc-text);
-    font-family:var(--jdc-prose);
-    font-size:.93rem; line-height:1.5;
-    outline:none;
-    transition:border-color .16s ease;
-}
-.jdc-input::placeholder{ color:var(--jdc-text-3); }
-.jdc-input:focus{ border-color:var(--jdc-clay-soft); }
-.jdc-send{
-    flex:none;
-    width:42px; height:42px;
-    display:inline-flex; align-items:center; justify-content:center;
-    background:var(--jdc-clay); color:#FBF6EE;
-    border:1px solid var(--jdc-clay); border-radius:2px;
-    cursor:pointer;
-    transition:background .16s ease, border-color .16s ease, opacity .16s ease;
-}
-.jdc-send:hover:not(:disabled){ background:#A82F26; border-color:#A82F26; }
-.jdc-send:disabled{ opacity:.4; cursor:not-allowed; }
-.jdc-send:focus-visible{ outline:2px solid var(--jdc-ochre); outline-offset:2px; }
-.jdc-send svg{ width:16px; height:16px; }
-
-.jdc-legal{
-    margin-top:8px;
-    font-family:var(--jdc-display);
-    font-size:.6rem; letter-spacing:.04em;
-    color:var(--jdc-text-3);
-    display:flex; align-items:center; gap:6px;
-}
-.jdc-legal a{ color:var(--jdc-text-3); text-decoration:underline; text-underline-offset:2px; }
-.jdc-legal a:hover{ color:var(--jdc-text-2); }
-.jdc-shield{ width:10px; height:10px; flex:none; }
-
-/* Turnstile lives here; invisible mode renders nothing until challenged */
-.jdc-ts{ display:flex; justify-content:center; }
-.jdc-ts:not(:empty){ margin-top:8px; }
+.jdc-slow{ display:none; }
+.jdc-loading.jdc-is-slow .jdc-slow{ display:block; }
 
 /* ── Small screens ────────────────────────────────────────────────────── */
 @media (max-width:600px){
@@ -4474,33 +4321,27 @@
     .jdc-teaser{ width:250px; }
     .jdc-panel{
         position:fixed;
-        left:10px; right:10px; bottom:10px;
-        width:auto;
-        height:min(76vh, calc(100vh - 96px));
+        left:0; right:0; top:0; bottom:0;
+        width:auto; height:100%; height:100dvh;
+        border:none;
     }
+    html.jdc-lock, html.jdc-lock body{ overflow:hidden; }
 }
 
-/* ── Accessibility ────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion:reduce){
-    #jdchat, .jdc-panel, .jdc-launcher, .jdc-launcher::after,
-    .jdc-teaser, .jdc-typing i, .jdc-ping, .back-to-top, #music-toggle{
+    #jdchat, .jdc-panel, .jdc-launcher, .jdc-launcher::after, .jdc-teaser,
+    .jdc-ping, .jdc-dots i, .jdc-frame, .back-to-top, #music-toggle{
         transition:none !important; animation:none !important;
     }
 }
-.jdc-sr{
-    position:absolute; width:1px; height:1px; padding:0; margin:-1px;
-    overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
-}
 </style>
 
-<div id="jdchat" data-state="closed">
-    <div class="jdc-teaser" id="jdc-teaser" role="button" tabindex="0" aria-label="Open JaedGPT chat">
+<div id="jdchat">
+    <div class="jdc-teaser" id="jdc-teaser" role="button" tabindex="0" aria-label="Open chat">
         <button class="jdc-teaser-x" id="jdc-teaser-x" type="button" aria-label="Dismiss">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true">
-                <path d="M18 6 6 18M6 6l12 12"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
         </button>
-        <span class="jdc-teaser-eyebrow">Ask JaedGPT</span>
+        <span class="jdc-teaser-eyebrow">Frontdesk</span>
         <p>Not sure which of these you actually need? Ask me — I'll point you at the right one.</p>
     </div>
 
@@ -4508,51 +4349,32 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5z"/>
         </svg>
-        <span class="jdc-label">Ask JaedGPT</span>
+        <span>Chat with Jaed</span>
         <span class="jdc-ping" aria-hidden="true"></span>
     </button>
 
-    <div class="jdc-panel" id="jdc-panel" role="dialog" aria-modal="false" aria-label="JaedGPT chat">
-        <div class="jdc-head">
-            <div>
-                <span class="jdc-eyebrow">AI assistant</span>
-                <span class="jdc-title">JaedGPT</span>
-                <div class="jdc-sub">Websites, SEO &amp; AEO, Google Ads, automation.</div>
-                <div class="jdc-diag" id="jdc-diag" hidden></div>
-            </div>
-            <div class="jdc-head-actions">
-                <button class="jdc-icon" id="jdc-reset" type="button" title="Start over" aria-label="Start over">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>
-                    </svg>
-                </button>
+    <div class="jdc-panel" id="jdc-panel" role="dialog" aria-modal="false" aria-label="Frontdesk chat">
+        <div class="jdc-bar">
+            <span class="jdc-bar-title"><b>●</b>&nbsp; Frontdesk</span>
+            <div class="jdc-bar-actions">
+                <a class="jdc-icon" href="https://chat.jaeddelosa.com/" target="_blank" rel="noopener" title="Open in new tab" aria-label="Open chat in a new tab">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>
+                </a>
                 <button class="jdc-icon" id="jdc-close" type="button" title="Close" aria-label="Close chat">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-                        <path d="M18 6 6 18M6 6l12 12"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
                 </button>
             </div>
         </div>
-
-        <div class="jdc-log" id="jdc-log" role="log" aria-live="polite" aria-atomic="false"></div>
-
-        <div class="jdc-foot">
-            <div class="jdc-form">
-                <label class="jdc-sr" for="jdc-input">Your message</label>
-                <textarea class="jdc-input" id="jdc-input" rows="1" placeholder="Ask about a project…" autocomplete="off"></textarea>
-                <button class="jdc-send" id="jdc-send" type="button" title="Send" aria-label="Send message" disabled>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M4 12h15M13 6l6 6-6 6"/>
-                    </svg>
-                </button>
+        <div class="jdc-frame-wrap">
+            <div class="jdc-loading" id="jdc-loading">
+                <span class="jdc-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span>Connecting</span>
+                <span class="jdc-slow">Taking a while? <a href="https://chat.jaeddelosa.com/" target="_blank" rel="noopener">Open the chat in a new tab</a></span>
             </div>
-            <div class="jdc-ts" id="jdc-ts"></div>
-            <div class="jdc-legal">
-                <svg class="jdc-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M12 2 4 5.5v6c0 5 3.4 9.2 8 10.5 4.6-1.3 8-5.5 8-10.5v-6L12 2z"/>
-                </svg>
-                <span>Protected by <a href="https://www.cloudflare.com/products/turnstile/" target="_blank" rel="noopener">Cloudflare Turnstile</a></span>
-            </div>
+            <!-- src is set on first open -->
+            <iframe class="jdc-frame" id="jdc-frame" title="Frontdesk — chat with Jaed"
+                    data-src="https://chat.jaeddelosa.com/"
+                    allow="clipboard-write" referrerpolicy="strict-origin-when-cross-origin"></iframe>
         </div>
     </div>
 </div>
@@ -4560,530 +4382,72 @@
 <script>
 (function () {
     'use strict';
+    var TEASER_MS = 5000;
 
-    /* ───────────────────────── Config ─────────────────────────
-       If your Worker's chat route is not /chat, set ENDPOINT to the
-       full URL and the fallback probing below never runs.
-       ────────────────────────────────────────────────────────── */
-    var ORIGIN    = 'https://test-ai.jaedd.workers.dev';
-    var ENDPOINT  = ORIGIN + '/chat';
-    var FALLBACKS = ['/api/chat', '/message', '/api/message', '/api'];
-    var SITEKEY   = '0x4AAAAAAEX_hkkt3xetFg3n';
-    var MAX_TURNS = 16;      // pairs of messages kept as context
-    var TIMEOUT   = 45000;
-    var TEASER_MS = 5000;    // how long before the nudge appears
-
-    var root = document.getElementById('jdchat');
-    if (!root) return;
+    var root     = document.getElementById('jdchat');
     var launcher = document.getElementById('jdc-launcher');
-    var panel    = document.getElementById('jdc-panel');
-    var log      = document.getElementById('jdc-log');
-    var input    = document.getElementById('jdc-input');
-    var sendBtn  = document.getElementById('jdc-send');
     var closeBtn = document.getElementById('jdc-close');
-    var resetBtn = document.getElementById('jdc-reset');
-    var tsHost   = document.getElementById('jdc-ts');
     var teaser   = document.getElementById('jdc-teaser');
     var teaserX  = document.getElementById('jdc-teaser-x');
-
-    var history = [];
-    var busy    = false;
-    var opened  = false;
+    var frame    = document.getElementById('jdc-frame');
+    var loading  = document.getElementById('jdc-loading');
+    var mobile   = window.matchMedia('(max-width:600px)');
+    var opened   = false;
 
     function store(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
     function recall(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
 
-    var sessionId = (function () {
-        var v = recall('jdc_sid');
-        if (!v) {
-            v = (window.crypto && crypto.randomUUID)
-                ? crypto.randomUUID()
-                : 'jdc-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10);
-            store('jdc_sid', v);
-        }
-        return v;
-    })();
-
-    /* ───────────────────── Text rendering ─────────────────────
-       Model output is escaped first, then a deliberately small
-       subset of markdown is re-applied. Nothing is ever injected raw.
-       ────────────────────────────────────────────────────────── */
-    function esc(s) {
-        return String(s).replace(/[&<>"']/g, function (c) {
-            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-        });
+    function loadFrame() {
+        if (frame.getAttribute('src')) return;
+        var slow = setTimeout(function () { loading.classList.add('jdc-is-slow'); }, 8000);
+        frame.addEventListener('load', function () {
+            clearTimeout(slow);
+            frame.classList.add('jdc-ready');
+            loading.style.display = 'none';
+        }, { once: true });
+        frame.setAttribute('src', frame.getAttribute('data-src'));
     }
 
-    function inline(s) {
-        s = s.replace(/`([^`\n]+)`/g, '<code>$1</code>');
-        s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-        s = s.replace(/(^|[\s(])\*([^*\n]+)\*/g, '$1<em>$2</em>');
-        s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
-            '<a href="$2" target="_blank" rel="noopener nofollow">$1</a>');
-        s = s.replace(/(^|[\s])(https?:\/\/[^\s<]+)/g,
-            '$1<a href="$2" target="_blank" rel="noopener nofollow">$2</a>');
-        return s;
-    }
-
-    function render(raw) {
-        var text = esc(raw == null ? '' : raw);
-        var out = [];
-        var blocks = text.split(/```/);
-
-        blocks.forEach(function (block, i) {
-            if (i % 2 === 1) {                       // fenced code
-                out.push('<pre><code>' + block.replace(/^\w*\n/, '') + '</code></pre>');
-                return;
-            }
-            block.split(/\n{2,}/).forEach(function (para) {
-                var lines = para.split('\n').filter(function (l) { return l.trim() !== ''; });
-                if (!lines.length) return;
-
-                var bullets = lines.every(function (l) { return /^\s*[-*•]\s+/.test(l); });
-                var numbers = lines.every(function (l) { return /^\s*\d+[.)]\s+/.test(l); });
-
-                if (bullets || numbers) {
-                    var tag = bullets ? 'ul' : 'ol';
-                    out.push('<' + tag + '>' + lines.map(function (l) {
-                        return '<li>' + inline(l.replace(/^\s*(?:[-*•]|\d+[.)])\s+/, '')) + '</li>';
-                    }).join('') + '</' + tag + '>');
-                } else {
-                    out.push('<p>' + inline(lines.join('<br>')) + '</p>');
-                }
-            });
-        });
-        return out.join('') || '<p></p>';
-    }
-
-    /* ───────────────────── Transcript ───────────────────── */
-    function bubble(role, html, cls) {
-        var wrap = document.createElement('div');
-        wrap.className = 'jdc-msg ' + (role === 'user' ? 'jdc-user' : 'jdc-bot') + (cls ? ' ' + cls : '');
-        var who = document.createElement('div');
-        who.className = 'jdc-who';
-        who.textContent = role === 'user' ? 'You' : 'JaedGPT';
-        var body = document.createElement('div');
-        body.className = 'jdc-body';
-        body.innerHTML = html;
-        wrap.appendChild(who);
-        wrap.appendChild(body);
-        log.appendChild(wrap);
-        stick();
-        return body;
-    }
-
-    function stick() {
-        log.scrollTop = log.scrollHeight;
-    }
-
-    function greet() {
-        log.innerHTML = '';
-        bubble('bot', render(
-            "Hi — I'm Jaed's assistant. Ask me what a project would involve, how long it takes, " +
-            "or which of these actually fits your business. Plain English, no sales pitch."
-        ));
-
-        var chips = document.createElement('div');
-        chips.className = 'jdc-chips';
-        [
-            'What would a new website cost me?',
-            'Can you get me found in ChatGPT search?',
-            'What can you automate for my team?',
-            'How do we start?'
-        ].forEach(function (q) {
-            var b = document.createElement('button');
-            b.type = 'button';
-            b.className = 'jdc-chip';
-            b.textContent = q;
-            b.addEventListener('click', function () { submit(q); });
-            chips.appendChild(b);
-        });
-        log.appendChild(chips);
-        stick();
-    }
-
-    function dropChips() {
-        var c = log.querySelector('.jdc-chips');
-        if (c) c.remove();
-    }
-
-    /* ───────────────────── Nudge ─────────────────────
-       Shows once per session, five seconds in. Dismissing it
-       keeps it gone for the rest of the visit.
-       ─────────────────────────────────────────────────── */
-    function hideTeaser(permanent) {
+    function hideTeaser(remember) {
         teaser.classList.remove('jdc-in');
-        if (permanent) store('jdc_teaser', 'seen');
+        if (remember) store('jdc-teaser-dismissed', '1');
     }
 
-    if (!recall('jdc_teaser')) {
-        setTimeout(function () {
-            if (!opened) {
-                teaser.classList.add('jdc-in');
-                store('jdc_teaser', 'seen');
-            }
-        }, TEASER_MS);
-    }
-
-    teaser.addEventListener('click', function () { open(); });
-    teaser.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
-    });
-    teaserX.addEventListener('click', function (e) {
-        e.stopPropagation();
-        hideTeaser(true);
-        launcher.focus();
-    });
-
-    /* ───────────────────── Turnstile ─────────────────────
-       Invisible widget, fresh token per message. Tokens are
-       single-use once the Worker verifies them.
-       ──────────────────────────────────────────────────── */
-    var tsReady = null, widgetId = null, pending = null;
-
-    function loadTurnstile() {
-        if (tsReady) return tsReady;
-        tsReady = new Promise(function (resolve, reject) {
-            if (window.turnstile) return resolve();
-            var s = document.createElement('script');
-            s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
-            s.async = true;
-            s.defer = true;
-            s.onload = function () { resolve(); };
-            s.onerror = function () { reject(new Error('turnstile-blocked')); };
-            document.head.appendChild(s);
-        });
-        return tsReady;
-    }
-
-    function settle(ok, val) {
-        if (!pending) return;
-        var p = pending;
-        pending = null;
-        ok ? p.resolve(val) : p.reject(val);
-    }
-
-    function getToken() {
-        return loadTurnstile().then(function () {
-            return new Promise(function (resolve, reject) {
-                pending = { resolve: resolve, reject: reject };
-
-                if (widgetId === null) {
-                    widgetId = window.turnstile.render(tsHost, {
-                        sitekey: SITEKEY,
-                        size: 'invisible',
-                        execution: 'execute',
-                        appearance: 'interaction-only',
-                        theme: 'dark',
-                        retry: 'never',
-                        callback: function (t) { settle(true, t); },
-                        'error-callback': function () { settle(false, new Error('turnstile-error')); return true; },
-                        'timeout-callback': function () { settle(false, new Error('turnstile-timeout')); },
-                        'expired-callback': function () { try { window.turnstile.reset(widgetId); } catch (e) {} }
-                    });
-                } else {
-                    try { window.turnstile.reset(widgetId); } catch (e) {}
-                }
-
-                try {
-                    window.turnstile.execute(widgetId);
-                } catch (e) {
-                    settle(false, new Error('turnstile-error'));
-                }
-
-                setTimeout(function () { settle(false, new Error('turnstile-timeout')); }, 25000);
-            });
-        });
-    }
-
-    /* ───────────────────── Worker call ───────────────────── */
-    function knownRoute() { return recall('jdc_route'); }
-    function rememberRoute(url) { store('jdc_route', url); }
-
-    function post(url, payload, signal) {
-        return fetch(url, {
-            method: 'POST',
-            mode: 'cors',
-            credentials: 'omit',
-            // text/plain keeps this a "simple" CORS request, so the browser sends
-            // NO preflight. The Worker's request.json() still parses it fine.
-            // That means the Worker only needs Access-Control-Allow-Origin — no
-            // OPTIONS handler required.
-            headers: {
-                'Content-Type': 'text/plain;charset=UTF-8'
-            },
-            body: JSON.stringify(payload),
-            signal: signal
-        }).catch(function (e) {
-            // fetch() only rejects when the request never completed:
-            // CORS refusal, DNS failure, or genuinely offline.
-            console.error('[JaedGPT] request to ' + url + ' failed before a response arrived:', e);
-            throw { kind: navigator.onLine === false ? 'offline' : 'blocked', url: url };
-        });
-    }
-
-    function callWorker(payload, signal) {
-        var first = knownRoute() || ENDPOINT;
-        return post(first, payload, signal).then(function (res) {
-            if (res.status !== 404 && res.status !== 405) {
-                rememberRoute(first);
-                return res;
-            }
-            // Probe the remaining routes once, then remember the winner.
-            var queue = FALLBACKS.map(function (p) { return ORIGIN + p; })
-                                 .filter(function (u) { return u !== first; });
-            var chain = Promise.resolve(res);
-            queue.forEach(function (u) {
-                chain = chain.then(function (prev) {
-                    if (prev.status !== 404 && prev.status !== 405) return prev;
-                    return post(u, payload, signal).then(function (r) {
-                        if (r.status !== 404 && r.status !== 405) rememberRoute(u);
-                        return r;
-                    });
-                });
-            });
-            return chain;
-        });
-    }
-
-    /* Accepts JSON of many shapes, SSE, or plain text. */
-    function readReply(res, target) {
-        var ct = (res.headers.get('content-type') || '').toLowerCase();
-
-        if (ct.indexOf('application/json') > -1) {
-            return res.json().then(function (data) { return pluck(data); });
-        }
-
-        if (!res.body || !res.body.getReader) {
-            return res.text().then(function (t) { return fromText(t); });
-        }
-
-        // Streamed: paint as it arrives.
-        var reader = res.body.getReader();
-        var dec = new TextDecoder();
-        var buf = '', shown = '';
-        var sse = ct.indexOf('event-stream') > -1;
-
-        function pump() {
-            return reader.read().then(function (r) {
-                if (r.done) return shown || fromText(buf);
-                buf += dec.decode(r.value, { stream: true });
-
-                if (sse) {
-                    var parts = buf.split(/\n\n/);
-                    buf = parts.pop();
-                    parts.forEach(function (evt) {
-                        evt.split('\n').forEach(function (line) {
-                            if (line.indexOf('data:') !== 0) return;
-                            var d = line.slice(5).trim();
-                            if (!d || d === '[DONE]') return;
-                            try {
-                                var j = JSON.parse(d);
-                                shown += pluck(j) || '';
-                            } catch (e) {
-                                shown += d;
-                            }
-                        });
-                    });
-                } else {
-                    shown = buf;
-                }
-
-                if (shown) { target.innerHTML = render(shown); stick(); }
-                return pump();
-            });
-        }
-        return pump();
-    }
-
-    function fromText(t) {
-        var s = (t || '').trim();
-        if (s.charAt(0) === '{' || s.charAt(0) === '[') {
-            try { return pluck(JSON.parse(s)); } catch (e) {}
-        }
-        return s;
-    }
-
-    function pluck(d) {
-        if (d == null) return '';
-        if (typeof d === 'string') return d;
-        var keys = ['reply', 'response', 'answer', 'message', 'text', 'output', 'result', 'content', 'delta'];
-        for (var i = 0; i < keys.length; i++) {
-            var v = d[keys[i]];
-            if (typeof v === 'string' && v) return v;
-            if (v && typeof v === 'object') {
-                var nested = pluck(v);
-                if (nested) return nested;
-            }
-        }
-        if (Array.isArray(d)) return d.map(pluck).filter(Boolean).join('');
-        if (d.choices && d.choices[0]) {
-            var c = d.choices[0];
-            return (c.message && c.message.content) || c.delta && c.delta.content || c.text || '';
-        }
-        return '';
-    }
-
-    /* ───────────────────── Send ───────────────────── */
-    function fail(target, msg) {
-        target.parentElement.classList.add('jdc-err');
-        target.innerHTML = render(msg);
-        stick();
-    }
-
-    function submit(text) {
-        text = (text || input.value || '').trim();
-        if (!text || busy) return;
-
-        dropChips();
-        busy = true;
-        sendBtn.disabled = true;
-        input.value = '';
-        input.style.height = 'auto';
-
-        bubble('user', render(text));
-        history.push({ role: 'user', content: text });
-        if (history.length > MAX_TURNS * 2) history = history.slice(-MAX_TURNS * 2);
-
-        var slot = bubble('bot', '<div class="jdc-typing"><i></i><i></i><i></i></div>');
-
-        var ctrl = window.AbortController ? new AbortController() : null;
-        var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, TIMEOUT);
-
-        getToken()
-            .catch(function () { return ''; })   // no token → let the Worker decide
-            .then(function (token) {
-                var payload = {
-                    message: text,
-                    messages: history.slice(),
-                    sessionId: sessionId,
-                    turnstileToken: token,
-                    'cf-turnstile-response': token
-                };
-                return callWorker(payload, ctrl && ctrl.signal);
-            })
-            .then(function (res) {
-                if (res.status === 401 || res.status === 403) throw { kind: 'gate' };
-                if (res.status === 429) throw { kind: 'rate' };
-                if (!res.ok) throw { kind: 'server', code: res.status };
-                slot.innerHTML = '';
-                return readReply(res, slot);
-            })
-            .then(function (reply) {
-                var out = (reply || '').trim();
-                if (!out) {
-                    fail(slot, "That came back empty. Try rephrasing, or use the contact form below and Jaed will answer himself.");
-                    return;
-                }
-                slot.innerHTML = render(out);
-                history.push({ role: 'assistant', content: out });
-                stick();
-            })
-            .catch(function (err) {
-                var kind = err && err.kind;
-                if (err && err.name === 'AbortError') {
-                    fail(slot, 'That took too long to come back. Send it again.');
-                } else if (kind === 'gate') {
-                    fail(slot, "The security check didn't pass for this page. Reload and try again — if it keeps happening, the domain isn't on the Turnstile allow-list yet.");
-                } else if (kind === 'rate') {
-                    fail(slot, "You're going faster than the limit allows. Give it a minute, then send again.");
-                } else if (kind === 'server') {
-                    fail(slot, 'The assistant is down right now (error ' + err.code + '). Use the contact form below and Jaed will reply personally.');
-                } else if (kind === 'offline') {
-                    fail(slot, "You're offline. Reconnect and send again.");
-                } else if (kind === 'blocked') {
-                    fail(slot, "The request was blocked before it reached the assistant — usually a CORS setting on the Worker. Open the browser console for the exact error.");
-                } else {
-                    fail(slot, "Couldn't reach the assistant. Open the browser console for details, or use the contact form below.");
-                }
-            })
-            .then(function () {
-                clearTimeout(timer);
-                busy = false;
-                sendBtn.disabled = input.value.trim() === '';
-                if (opened) input.focus();
-            });
-    }
-
-    /* ───────────────────── Open / close ───────────────────── */
     function open() {
+        if (opened) return;
         opened = true;
         hideTeaser(true);
+        loadFrame();
         root.classList.add('jdc-open');
-        root.dataset.state = 'open';
         launcher.setAttribute('aria-expanded', 'true');
-        if (!log.children.length) greet();
-        // Turnstile mounts an iframe and the probe hits the network. Both are
-        // deferred to idle so the open animation and video playback stay smooth.
-        idle(function () {
-            loadTurnstile().catch(function () {});
-            probe();
-        });
-        setTimeout(function () { input.focus(); }, 180);
-    }
-
-    function idle(fn) {
-        if (window.requestIdleCallback) {
-            requestIdleCallback(fn, { timeout: 1200 });
-        } else {
-            setTimeout(fn, 500);
-        }
-    }
-
-    /* One-time reachability probe. Tells you WHICH side is broken, in the panel,
-       instead of making you read the network tab. */
-    var probed = false;
-    function probe() {
-        if (probed) return;
-        probed = true;
-        var diag = document.getElementById('jdc-diag');
-        if (!diag) return;
-
-        fetch(ORIGIN + '/', { method: 'GET', mode: 'cors', credentials: 'omit' })
-            .then(function (r) {
-                console.log('[JaedGPT] Worker reachable, CORS OK. Root status ' + r.status);
-            })
-            .catch(function (e) {
-                console.error('[JaedGPT] CORS PROBLEM. The Worker did not return ' +
-                    'Access-Control-Allow-Origin for ' + location.origin + '. Detail:', e);
-                diag.hidden = false;
-                diag.textContent = 'Setup needed: the Worker is not returning ' +
-                    'Access-Control-Allow-Origin for ' + location.origin +
-                    '. Add that origin in the Worker and redeploy.';
-            });
+        if (mobile.matches) document.documentElement.classList.add('jdc-lock');
+        setTimeout(function () { try { frame.focus(); } catch (e) {} }, 250);
     }
 
     function close() {
+        if (!opened) return;
         opened = false;
         root.classList.remove('jdc-open');
-        root.dataset.state = 'closed';
         launcher.setAttribute('aria-expanded', 'false');
+        document.documentElement.classList.remove('jdc-lock');
         launcher.focus();
     }
 
     launcher.addEventListener('click', open);
     closeBtn.addEventListener('click', close);
 
-    resetBtn.addEventListener('click', function () {
-        history = [];
-        greet();
-        input.focus();
-    });
+    /* warm the connection when someone is about to open it */
+    launcher.addEventListener('pointerenter', loadFrame, { once: true });
 
-    sendBtn.addEventListener('click', function () { submit(); });
-
-    input.addEventListener('input', function () {
-        sendBtn.disabled = busy || this.value.trim() === '';
-        this.style.height = 'auto';
-        this.style.height = Math.min(this.scrollHeight, 112) + 'px';
+    teaser.addEventListener('click', open);
+    teaser.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
     });
+    teaserX.addEventListener('click', function (e) { e.stopPropagation(); hideTeaser(true); });
 
-    input.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            submit();
-        }
-    });
+    if (!recall('jdc-teaser-dismissed')) {
+        setTimeout(function () { if (!opened) teaser.classList.add('jdc-in'); }, TEASER_MS);
+    }
 
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && opened) close();
@@ -5103,7 +4467,7 @@
     })();
 })();
 </script>
-<!-- ════════════════════ end JaedGPT chat widget ════════════════════ -->
+<!-- ════════════════════ end Frontdesk chat widget ════════════════════ -->
 
 
 <script>
