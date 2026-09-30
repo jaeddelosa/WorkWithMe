@@ -4765,7 +4765,7 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
         hideNudge(true);
         setUnread(false);
         root.classList.remove('jdc-pulse', 'jdc-compact');
-        if (mobile.matches) setTimeout(function () { if (!opened) root.classList.add('jdc-compact'); }, 4000);
+        if (mobile.matches) root.classList.add('jdc-compact');
         (returnTo || launcher).focus();
         returnTo = null;
     }
@@ -4803,10 +4803,10 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
     /* a first-time visitor gets one ring shortly after the page settles */
     if (!recall('jdc-seen')) {
         store('jdc-seen', '1');
-        setTimeout(function () { if (!opened && !used) pulse(); }, 1500);
+        if (!mobile.matches) setTimeout(function () { if (!opened && !used) pulse(); }, 1500);
     }
 
-    if (!recall('jdc-nudge-dismissed')) {
+    if (!recall('jdc-nudge-dismissed') && !mobile.matches) {
         setTimeout(function () {
             if (opened || used) return;
             nudge.classList.add('jdc-typing-now', 'jdc-in');
@@ -4827,7 +4827,7 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
     /* Phones: show the label briefly, then shrink to a circle so it never covers text.
        Desktop: shrink while the visitor scrolls, grow back when they stop. */
     if (mobile.matches) {
-        setTimeout(function () { root.classList.add('jdc-compact'); }, 6000);
+        root.classList.add('jdc-compact');
     } else {
         var idle;
         window.addEventListener('scroll', function () {
@@ -5758,5 +5758,19 @@ a.pf-src:hover{ color:var(--text); }
 
 /* The small corner view is off until the chat page handles narrow widths */
 @media (min-width:601px){ #jdc-expand{ display:none !important; } }
+
+/* ── Phones: one tidy floating button, nothing else stacked on the text ── */
+@media (max-width:600px){
+    .jdc-nudge, .jdc-badge{ display:none !important; }
+    #jdchat .jdc-launcher::before{ animation:none !important; }
+    #jdchat.jdc-compact .jdc-launcher:hover{ padding:0 7px; gap:0; }
+    #jdchat.jdc-compact .jdc-launcher:hover .jdc-l-text{ max-width:0; opacity:0; }
+    .back-to-top, #music-toggle{ display:none !important; }
+    /* sticky call bar: one clear line + button, leaving room for the chat button */
+    .sticky-cta-inner{ padding-right:84px !important; gap:10px !important; }
+    .sticky-cta-left{ display:none !important; }
+    .sticky-cta-right{ flex:1; }
+    .sticky-cta-btn{ flex:1; justify-content:center; }
+}
 </style>
 
