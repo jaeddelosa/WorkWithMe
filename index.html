@@ -28,7 +28,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jaed Delosa | Websites, Google Ads, SEO/AEO & AI Automation</title>
+    <title>Jaed Delosa | Websites, Google Ads, SEO & AI Automation</title>
     <meta name="description" content="I help growing businesses get a website that brings in customers, get found on Google and in AI tools like ChatGPT, run Google Ads, and automate repetitive work — all handled by one person, explained in plain English.">
     <meta name="author" content="Jaed Delosa">
     <meta name="keywords" content="web designer, website development, google ads, ppc, paid search, social media marketing, meta ads, SEO, local SEO, answer engine optimization, AEO, AI automation, workflow automation, n8n, chatbot development, small business marketing">
@@ -1793,6 +1793,14 @@
                     <a href="https://www.linkedin.com/in/jaeddelosa/" class="btn btn-linkedin" target="_blank"><i class="fab fa-linkedin-in"></i> Connect on LinkedIn</a>
                     <a href="https://workwithme.jaeddelosa.com/resume/" class="btn btn-secondary" target="_blank">View Resume <i class="fas fa-file-alt"></i></a>
                 </div>
+                <button type="button" class="hero-chat" data-open-chat aria-controls="jdc-panel">
+                    <span class="hero-chat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 5.1V4h-1a1 1 0 0 1 0-2h4a1 1 0 1 1 0 2h-1v1.1A8 8 0 0 1 20 13v2H4v-2a8 8 0 0 1 7-7.9Z"/><rect x="2" y="16.5" width="20" height="2.5" rx="1.25"/></svg></span>
+                    <span class="hero-chat-text">
+                        <strong>Have a quick question first?</strong>
+                        <span>Ask Frontdesk anything. You can also book a call or leave your details there, if you want to.</span>
+                    </span>
+                    <span class="hero-chat-go" aria-hidden="true"><i class="fas fa-comment-dots"></i> Start chat</span>
+                </button>
             </div>
             <div class="hero-image">
                 <div class="hero-visual">
@@ -4454,7 +4462,7 @@
 .jdc-panel{
     position:absolute; right:0; bottom:0;
     width:min(460px, calc(100vw - 48px));
-    height:min(740px, calc(100vh - 48px - var(--jdc-lift)));
+    height:var(--jdc-ph);
     display:flex; flex-direction:column;
     background:var(--c-base);
     border:1px solid var(--c-line);
@@ -4473,11 +4481,19 @@
     border-bottom-right-radius:24px;
 }
 
+/* The chat is the same height in the corner and in the centre, and doesn't
+   change when the sticky bar slides up. The chat page inside keeps its own
+   layout, so a height change could push its message bar out of view. */
+#jdchat{
+    --jdc-ph:min(740px, calc(100vh - 128px));
+    --jdc-bw:min(1040px, calc(100vw - 64px));
+    --jdc-bh:var(--jdc-ph);
+}
 #jdchat.jdc-big .jdc-panel{
     position:fixed;
-    top:50%; left:50%; right:auto; bottom:auto;
-    width:min(1040px, calc(100vw - 64px));
-    height:min(880px, calc(100vh - 64px));
+    top:calc(50% + 22px); left:50%; right:auto; bottom:auto;
+    width:var(--jdc-bw);
+    height:var(--jdc-bh);
     transform-origin:center;
     transform:translate(-50%,-50%) scale(.94);
 }
@@ -4604,10 +4620,15 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
             </svg>
         </span>
         <span class="jdc-l-text" aria-hidden="true">
-            <strong>Ask Front Desk</strong>
+            <strong>Ask Frontdesk</strong>
             <small>Online now</small>
         </span>
         <span class="jdc-badge" aria-hidden="true">1</span>
+    </button>
+
+    <button class="jdc-exit" id="jdc-exit" type="button" aria-label="Close chat and go back to the website">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        Back to website
     </button>
 
     <div class="jdc-panel" id="jdc-panel" role="dialog" aria-modal="false" aria-labelledby="jdc-name">
@@ -4625,8 +4646,8 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
                 <a class="jdc-btn" href="https://chat.jaeddelosa.com/" target="_blank" rel="noopener" title="Open in new tab" aria-label="Open chat in a new tab">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M19 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4"/></svg>
                 </a>
-                <button class="jdc-btn" id="jdc-close" type="button" title="Close" aria-label="Close chat">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                <button class="jdc-btn jdc-btn-close" id="jdc-close" type="button" title="Close chat" aria-label="Close chat and go back to the website">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
                 </button>
             </div>
         </div>
@@ -4653,8 +4674,10 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
         nudge = $('jdc-nudge'), bubble = $('jdc-bubble'), dismiss = $('jdc-dismiss'),
         frame = $('jdc-frame'), skel = $('jdc-skel');
     var mobile = window.matchMedia('(max-width:600px)');
+    var panel = $('jdc-panel'), returnTo = null;
     var html = document.documentElement;
     var opened = false;
+    var used = false;   /* true once the visitor has opened the chat this visit */
 
     function store(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
     function recall(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
@@ -4670,12 +4693,25 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
         frame.setAttribute('src', frame.getAttribute('data-src'));
     }
 
+    /* once the open animation ends, resize the chat frame by 1px and back so the
+       chat page measures its final size and keeps its message bar in view */
+    function refit() {
+        setTimeout(function () {
+            if (!opened) return;
+            frame.style.height = 'calc(100% - 1px)';
+            requestAnimationFrame(function () {
+                requestAnimationFrame(function () { frame.style.height = ''; });
+            });
+        }, 550);
+    }
+
     function setBig(on) {
         root.classList.toggle('jdc-big', on);
         expandBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
         expandBtn.title = on ? 'Smaller view' : 'Full view';
         expandBtn.setAttribute('aria-label', on ? 'Smaller view' : 'Full view');
         html.classList.toggle('jdc-lock-big', on && opened);
+        panel.setAttribute('aria-modal', on ? 'true' : 'false');
     }
 
     function hideNudge(remember) {
@@ -4696,21 +4732,25 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
         launcher.setAttribute('aria-label', on ? 'Frontdesk chat, 1 new message' : 'Frontdesk chat, online now');
     }
 
-    function open() {
-        if (opened) return;
+    function open(center) {
+        center = center === true;
+        if (opened) { if (center && !mobile.matches) { setBig(true); refit(); } return; }
         opened = true;
+        used = true;
         hideNudge(true);
         setUnread(false);
         loadFrame();
         if (!mobile.matches) {
-            var pref = recall('jdc-big');
-            var tight = window.innerHeight < 700 || window.innerWidth < 1100;
-            setBig(pref ? pref === '1' : tight);
+            /* Always the wide, centred view on desktop. The chat page only keeps
+               its message box in view when it's wide; in a narrow window it stacks
+               its lobby panel above the chat and pushes the message box down. */
+            setBig(true);
         } else {
             html.classList.add('jdc-lock');
         }
         root.classList.add('jdc-open');
         launcher.setAttribute('aria-expanded', 'true');
+        refit();
         setTimeout(function () { try { frame.focus(); } catch (e) {} }, 300);
     }
 
@@ -4721,16 +4761,24 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
         launcher.setAttribute('aria-expanded', 'false');
         html.classList.remove('jdc-lock', 'jdc-lock-big');
         setTimeout(function () { if (!opened) root.classList.remove('jdc-big'); }, 450);
-        launcher.focus();
+        /* come back to a clean corner button: no welcome message, badge or ring */
+        hideNudge(true);
+        setUnread(false);
+        root.classList.remove('jdc-pulse', 'jdc-compact');
+        if (mobile.matches) setTimeout(function () { if (!opened) root.classList.add('jdc-compact'); }, 4000);
+        (returnTo || launcher).focus();
+        returnTo = null;
     }
 
     launcher.addEventListener('click', open);
     launcher.addEventListener('pointerenter', loadFrame, { once: true });
     closeBtn.addEventListener('click', close);
+    $('jdc-exit').addEventListener('click', close);
     backdrop.addEventListener('click', close);
     expandBtn.addEventListener('click', function () {
         var on = !root.classList.contains('jdc-big');
         setBig(on);
+        refit();
         store('jdc-big', on ? '1' : '0');
     });
 
@@ -4742,6 +4790,12 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
     Array.prototype.forEach.call(document.querySelectorAll('.jdc-reply'), function (b) {
         b.addEventListener('click', open);
     });
+    /* any element with data-open-chat (e.g. the hero "Start chat" button) opens the widget */
+    /* opens the chat centred on screen (desktop) or full screen (phones) */
+    Array.prototype.forEach.call(document.querySelectorAll('[data-open-chat]'), function (b) {
+        b.addEventListener('pointerenter', loadFrame, { once: true });
+        b.addEventListener('click', function () { returnTo = b; open(true); });
+    });
 
     /* the nudge arrives like a real message: typing first, then the text */
     if (recall('jdc-unread') === '1') setUnread(true);
@@ -4749,16 +4803,17 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
     /* a first-time visitor gets one ring shortly after the page settles */
     if (!recall('jdc-seen')) {
         store('jdc-seen', '1');
-        setTimeout(function () { if (!opened) pulse(); }, 1500);
+        setTimeout(function () { if (!opened && !used) pulse(); }, 1500);
     }
 
     if (!recall('jdc-nudge-dismissed')) {
         setTimeout(function () {
-            if (opened) return;
+            if (opened || used) return;
             nudge.classList.add('jdc-typing-now', 'jdc-in');
             loadFrame();   /* warm it up so the chat is ready when they click */
             setTimeout(function () {
                 nudge.classList.remove('jdc-typing-now');
+                if (opened || used) { hideNudge(true); return; }
                 setUnread(true);
                 pulse();
             }, 1300);
@@ -5644,5 +5699,64 @@ a.pf-src:hover{ color:var(--text); }
     .pf-grid{ grid-template-columns:1fr; }
     .pf-item,.pf-item + .pf-item{ padding:28px 0; border-left:0; }
 }
+
+/* ── Hero: open-the-chat line (sits under the buttons, not in their row) ── */
+.hero-chat{
+    display:flex; align-items:center; gap:14px; width:100%; max-width:560px;
+    margin-top:28px; padding:16px 18px 16px 16px; text-align:left; cursor:pointer;
+    background:var(--panel); border:1px solid var(--rule-2); border-radius:3px;
+    color:var(--text-2); font:inherit;
+    animation:fadeInUp 0.6s ease 0.5s backwards;
+    transition:border-color .15s ease, background .15s ease;
+}
+.hero-chat:hover{ border-color:var(--ochre); background:var(--panel-2); }
+.hero-chat:focus-visible{ outline:2px solid var(--ochre); outline-offset:3px; }
+.hero-chat-icon{
+    position:relative; flex:none; width:40px; height:40px; border-radius:50%;
+    display:grid; place-items:center; background:var(--clay); color:#fff;
+}
+.hero-chat-icon svg{ width:20px; height:20px; }
+.hero-chat-icon::after{
+    content:''; position:absolute; right:-1px; bottom:-1px; width:11px; height:11px;
+    border-radius:50%; background:#3FB950; border:2px solid var(--panel);
+}
+.hero-chat-text{ flex:1; min-width:0; display:flex; flex-direction:column; line-height:1.35; }
+.hero-chat-text strong{ font-family:var(--display); font-weight:600; font-size:1rem; color:var(--text); }
+.hero-chat-text span{ font-size:0.94rem; color:var(--text-3); margin-top:2px; }
+.hero-chat-go{
+    flex:none; display:inline-flex; align-items:center; gap:7px;
+    font-family:var(--display); font-weight:600; font-size:0.9rem; color:var(--ochre);
+}
+.hero-chat:hover .hero-chat-go{ color:var(--text); }
+@media (max-width:560px){
+    .hero-chat{ flex-wrap:wrap; }
+    .hero-chat-go{ width:100%; justify-content:center; padding-top:12px; margin-top:2px; border-top:1px solid var(--rule); }
+}
+@media (prefers-reduced-motion:reduce){ .hero-chat{ animation:none; transition:none; } }
+
+/* ── Chat: clearer close + "Back to website" button in centered view ─── */
+#jdchat .jdc-btn-close{ background:var(--c-raised); color:var(--c-text); }
+#jdchat .jdc-btn-close:hover{ background:var(--c-line); }
+.jdc-exit{
+    position:fixed; z-index:2;
+    top:calc(50% + 22px - var(--jdc-bh) / 2 - 54px);
+    right:calc((100vw - var(--jdc-bw)) / 2);
+    display:inline-flex; align-items:center; gap:8px;
+    height:40px; padding:0 16px 0 12px; border-radius:999px; cursor:pointer;
+    font:600 .92rem/1 var(--display, system-ui), sans-serif;
+    background:var(--c-surface); color:var(--c-text); border:1px solid var(--c-line);
+    box-shadow:0 8px 24px rgba(0,0,0,.4);
+    opacity:0; visibility:hidden; transform:translateY(-6px);
+    transition:opacity .25s ease, transform .25s ease, visibility .25s, background .15s ease;
+}
+.jdc-exit svg{ width:16px; height:16px; }
+.jdc-exit:hover{ background:var(--c-raised); }
+.jdc-exit:focus-visible{ outline:2px solid var(--c-text); outline-offset:2px; }
+#jdchat.jdc-open.jdc-big .jdc-exit{ opacity:1; visibility:visible; transform:none; }
+@media (max-width:600px){ .jdc-exit{ display:none !important; } }
+@media (prefers-reduced-motion:reduce){ .jdc-exit{ transition:none; } }
+
+/* The small corner view is off until the chat page handles narrow widths */
+@media (min-width:601px){ #jdc-expand{ display:none !important; } }
 </style>
 
