@@ -1,144 +1,609 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resume – Jaed Delosa</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume | Jaed Delosa</title>
+<meta name="description" content="Resume of Jaed Delosa — websites, SEO & AEO, Google Ads and AI automation. Based in Cebu, Philippines.">
+<link rel="canonical" href="https://jaeddelosa.com/resume/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     BRAND TOKENS — change these to match jaeddelosa.com exactly
+     ============================================================ */
+  :root {
+    --brand: #4f46e5;          /* primary accent */
+    --brand-2: #06b6d4;        /* secondary accent (gradient end) */
+    --brand-dark: #3730a3;     /* hover / strong accent text */
+    --brand-soft: #eef2ff;     /* chip background */
+    --ink: #0f172a;            /* main text */
+    --muted: #64748b;          /* secondary text */
+    --rule: #e2e8f0;           /* dividers */
+    --page: #ffffff;
+    --bg: #f1f5f9;
+    --hero-bg: #0f172a;        /* header band */
+    --hero-ink: #f8fafc;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--brand); }
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background-color: #0A0A0C;
-      color: #EAEAEF;
-      line-height: 1.5;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-    }
+  /* ---------- Toolbar ---------- */
+  .toolbar {
+    max-width: 1040px;
+    margin: 24px auto 0;
+    padding: 0 16px;
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  }
+  .toolbar .back { margin-right: auto; font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; }
+  .toolbar .back:hover { color: var(--brand); }
+  .toolbar button {
+    font: inherit; font-size: 14px; font-weight: 600;
+    border: 1px solid var(--rule); background: #fff; color: var(--ink);
+    padding: 9px 16px; border-radius: 999px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: border-color .15s, background .15s, transform .15s;
+  }
+  .toolbar button:hover { border-color: var(--brand); transform: translateY(-1px); }
+  .toolbar button.primary {
+    background: linear-gradient(135deg, var(--brand), var(--brand-2));
+    border-color: transparent; color: #fff;
+  }
+  .toolbar svg { width: 16px; height: 16px; }
 
-    /* subtle red gradient background */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at 50% 30%, rgba(224, 108, 108, 0.03) 0%, rgba(0, 0, 0, 0) 70%);
-      pointer-events: none;
-      z-index: -2;
-    }
+  /* ---------- Page shell ---------- */
+  .resume {
+    max-width: 1040px;
+    margin: 12px auto 48px;
+    background: var(--page);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(15,23,42,.06), 0 12px 32px rgba(15,23,42,.08);
+  }
 
-    .card {
-      max-width: 650px;
-      width: 100%;
-      background: rgba(20, 20, 28, 0.7);
-      backdrop-filter: blur(2px);
-      border-radius: 32px;
-      padding: 3rem 2.5rem;
-      text-align: center;
-      border: 1px solid rgba(224, 108, 108, 0.15);
-      transition: all 0.2s ease;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    }
+  /* ---------- Hero header ---------- */
+  header {
+    background: var(--hero-bg);
+    color: var(--hero-ink);
+    padding: 44px 56px 36px;
+    position: relative;
+  }
+  header::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px;
+    background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  }
+  .eyebrow {
+    display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase;
+    color: var(--brand-2); margin-bottom: 10px;
+  }
+  h1 {
+    font-family: "Plus Jakarta Sans", "Inter", sans-serif;
+    font-size: 44px; font-weight: 800; letter-spacing: -0.5px;
+    margin: 0; line-height: 1.05;
+  }
+  .headline { font-size: 17px; font-weight: 500; margin: 10px 0 18px; color: #cbd5e1; }
+  .headline strong { color: var(--hero-ink); font-weight: 600; }
+  .contact {
+    display: flex; flex-wrap: wrap; gap: 6px 20px;
+    font-size: 14px; color: #cbd5e1;
+    list-style: none; margin: 0; padding: 0;
+  }
+  .contact a { color: inherit; text-decoration: none; }
+  .contact a:hover { color: #fff; text-decoration: underline; }
+  .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  .cta a {
+    font-size: 14px; font-weight: 600; text-decoration: none;
+    padding: 9px 18px; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.25); color: #fff;
+  }
+  .cta a.solid { background: linear-gradient(135deg, var(--brand), var(--brand-2)); border-color: transparent; }
+  .cta a:hover { filter: brightness(1.1); }
 
-    .card:hover {
-      border-color: rgba(224, 108, 108, 0.35);
-      background: rgba(25, 25, 35, 0.8);
-    }
+  /* ---------- Body grid ---------- */
+  .body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 0;
+  }
+  .main { padding: 36px 44px 44px 56px; }
+  aside { padding: 36px 40px 44px 32px; background: #f8fafc; border-left: 1px solid var(--rule); }
 
-    .icon {
-      font-size: 3.5rem;
-      margin-bottom: 1rem;
-    }
+  section { margin-bottom: 30px; }
+  section:last-child { margin-bottom: 0; }
+  h2 {
+    font-family: "Plus Jakarta Sans", "Inter", sans-serif;
+    font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.4px;
+    color: var(--ink); margin: 0 0 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  h2::before {
+    content: ""; width: 18px; height: 3px; border-radius: 2px;
+    background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  }
+  h3 { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); margin: 14px 0 6px; }
+  h3:first-of-type { margin-top: 0; }
+  p { margin: 0; }
 
-    h3 {
-      font-size: 1.8rem;
-      font-weight: 600;
-      margin-bottom: 1.2rem;
-      background: linear-gradient(135deg, #FFFFFF 0%, #E6A0A0 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      letter-spacing: -0.01em;
-    }
+  /* ---------- Career path ---------- */
+  .path { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; }
+  .path span:not(.arrow) {
+    border: 1px solid var(--rule); border-radius: 999px; padding: 4px 12px;
+    font-size: 13px; font-weight: 600; background: #fff;
+  }
+  .path span:last-child { background: var(--brand-soft); border-color: transparent; color: var(--brand-dark); }
+  .path em { font-style: normal; font-weight: 500; color: var(--muted); margin-left: 4px; }
+  .path .arrow { color: var(--brand); font-weight: 700; }
 
-    .message {
-      color: #B8B8CC;
-      font-size: 1.1rem;
-      margin-bottom: 2rem;
-      line-height: 1.5;
-    }
+  /* ---------- Competencies ---------- */
+  .competencies { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; list-style: none; padding: 0; margin: 0; }
+  .competencies li {
+    border: 1px solid var(--rule); border-radius: 10px; padding: 10px 12px;
+    font-size: 14px; font-weight: 600; line-height: 1.35;
+  }
+  .competencies li span { display: block; font-weight: 400; font-size: 13px; color: var(--muted); margin-top: 2px; }
 
-    .linkedin-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      background: linear-gradient(105deg, #C44C4C 0%, #8B2A2A 100%);
-      color: white;
-      font-weight: 600;
-      padding: 0.85rem 2rem;
-      border-radius: 40px;
-      text-decoration: none;
-      transition: all 0.25s ease;
-      font-size: 1rem;
-      box-shadow: 0 8px 20px rgba(200, 60, 60, 0.2);
-      border: none;
-      cursor: pointer;
-    }
+  /* ---------- Chips (tools, certs) ---------- */
+  .skills { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; margin: 0; }
+  .skills li {
+    background: var(--brand-soft); color: var(--brand-dark);
+    font-size: 12.5px; font-weight: 500;
+    padding: 3px 10px; border-radius: 999px;
+  }
 
-    .linkedin-btn:hover {
-      transform: translateY(-3px);
-      background: linear-gradient(105deg, #D96060 0%, #A03A3A 100%);
-      box-shadow: 0 15px 25px -10px rgba(200, 60, 60, 0.4);
-    }
+  /* ---------- Experience (styling only — content unchanged) ---------- */
+  .job { margin-bottom: 18px; padding-left: 16px; border-left: 2px solid var(--rule); break-inside: avoid; page-break-inside: avoid; }
+  .job:last-child { margin-bottom: 0; }
+  .job-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .job-title { font-weight: 600; font-size: 15.5px; }
+  .job-title .org { font-weight: 500; color: var(--brand); }
+  .dates { color: var(--muted); font-size: 13px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .job ul { margin: 6px 0 0; padding-left: 18px; }
+  .job li { margin: 2px 0; }
+  .job li::marker { color: var(--brand); }
 
-    .footer-note {
-      margin-top: 2rem;
-      font-size: 0.8rem;
-      color: #6C6C7A;
-    }
+  /* ---------- Projects ---------- */
+  .projects { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; list-style: none; padding: 0; margin: 0; }
+  .projects li {
+    border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px;
+    break-inside: avoid; page-break-inside: avoid;
+  }
+  .projects .p-name { font-weight: 600; font-size: 14.5px; }
+  .projects .p-tag { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .6px; color: var(--brand); }
+  .projects .p-desc { font-size: 13.5px; color: #334155; margin: 4px 0 6px; line-height: 1.45; }
+  .projects a { font-size: 12.5px; font-weight: 500; text-decoration: none; }
+  .projects a:hover { text-decoration: underline; }
 
-    .footer-note a {
-      color: #E06C6C;
-      text-decoration: none;
-    }
+  /* ---------- Sidebar lists ---------- */
+  .plain-list { list-style: none; padding: 0; margin: 0; }
+  .plain-list li { margin-bottom: 10px; font-size: 14px; line-height: 1.4; }
+  .plain-list .meta { display: block; color: var(--muted); font-size: 13px; }
+  .pub p { font-size: 13.5px; line-height: 1.5; }
 
-    .footer-note a:hover {
-      text-decoration: underline;
-    }
+  /* ---------- Responsive ---------- */
+  @media (max-width: 860px) {
+    .body { grid-template-columns: 1fr; }
+    aside { border-left: 0; border-top: 1px solid var(--rule); }
+    .main, aside { padding: 32px 28px; }
+    header { padding: 36px 28px 30px; }
+  }
+  @media (max-width: 560px) {
+    .resume { margin: 8px 16px 32px; border-radius: 10px; }
+    .main, aside { padding: 28px 20px; }
+    header { padding: 30px 20px 26px; }
+    h1 { font-size: 32px; }
+    .competencies, .projects { grid-template-columns: 1fr; }
+    .toolbar button { flex: 1 1 auto; justify-content: center; }
+    .toolbar .back { flex-basis: 100%; }
+    .dates { white-space: normal; }
+  }
 
-    @media (max-width: 550px) {
-      .card { padding: 2rem 1.5rem; }
-      h3 { font-size: 1.5rem; }
+  /* ---------- Print / PDF ---------- */
+  @page { size: letter; margin: 0.45in 0.5in; }
+  @media print {
+    body { background: #fff; font-size: 9.3pt; line-height: 1.36; }
+    .toolbar, .cta, .no-print { display: none !important; }
+    .resume { box-shadow: none; margin: 0; max-width: none; border-radius: 0; overflow: visible; }
+    header { padding: 20px 24px 18px; border-radius: 8px; }
+    header, header::after, h2::before, .skills li, aside {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
     }
-  </style>
+    h1 { font-size: 26pt; }
+    .headline { font-size: 11pt; margin: 6px 0 10px; }
+    .contact { font-size: 9pt; }
+    .body { grid-template-columns: minmax(0, 1fr) 2.15in; }
+    .main { padding: 18px 18px 0 0; }
+    aside { padding: 18px 0 0 16px; background: #fff; border-left: 1px solid var(--rule); }
+    section { margin-bottom: 13px; }
+    .competencies li { padding: 6px 8px; font-size: 9pt; }
+    .competencies li span { font-size: 8.5pt; }
+    .job { margin-bottom: 10px; }
+    .job-title { font-size: 10pt; }
+    .dates { font-size: 8.5pt; }
+    h2 { break-after: avoid; page-break-after: avoid; margin-bottom: 8px; }
+    aside section { break-inside: avoid; page-break-inside: avoid; }
+    .job ul { margin-top: 3px; }
+    .job li { margin: 0; }
+    .competencies { gap: 6px; }
+    .projects { display: block; }
+    .projects li { border: 0; border-radius: 0; padding: 0 0 0 10px; margin-bottom: 4px; border-left: 2px solid var(--rule); }
+    .projects .p-tag { display: none; }
+    .projects .p-name, .projects .p-desc { display: inline; font-size: 9pt; }
+    .projects .p-name::after { content: " — "; font-weight: 400; }
+    .projects .p-desc { margin: 0; line-height: 1.35; }
+    .projects a::before { content: " "; }
+    .projects .p-desc { font-size: 8.8pt; }
+    .projects a { font-size: 8.5pt; }
+    .skills li { font-size: 8pt; padding: 1px 7px; }
+    .path { margin-top: 8px; gap: 5px; }
+    .path span:not(.arrow) { font-size: 8.5pt; padding: 1px 8px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .plain-list li, .pub p { font-size: 9pt; }
+    a { text-decoration: none !important; }
+  }
+</style>
 </head>
 <body>
-  <div class="card">
-    <div class="icon">📄</div>
-    <h3>Resume not available at the moment</h3>
-    <div class="message">
-      My detailed resume is currently being updated.<br>
-      Please check back soon or visit my LinkedIn profile for my professional background and experience.
+
+<div class="toolbar" role="toolbar" aria-label="Download options">
+  <a class="back" href="https://jaeddelosa.com/">&larr; Back to jaeddelosa.com</a>
+  <button class="primary" onclick="window.print()" title="Opens print dialog — choose 'Save as PDF'">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Download PDF
+  </button>
+  <button onclick="downloadWord()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    Word (.doc)
+  </button>
+  <button onclick="downloadText()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg>
+    Plain text (.txt)
+  </button>
+</div>
+
+<main class="resume" id="resume">
+  <header>
+    <span class="eyebrow">Web &middot; SEO/AEO &middot; Google Ads &middot; AI Automation</span>
+    <h1>Jaed Delosa</h1>
+    <p class="headline"><strong>Content writer turned web, SEO &amp; AI automation specialist</strong> &mdash; helping growing businesses get found online and win back their time.</p>
+    <ul class="contact">
+      <li>Cebu, Philippines</li>
+      <li><a href="tel:+639481931315">+63 948 193 1315</a></li>
+      <li><a href="mailto:jaeddelosa@gmail.com">jaeddelosa@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/jaeddelosa/" target="_blank" rel="noopener">linkedin.com/in/jaeddelosa</a></li>
+      <li><a href="https://jaeddelosa.com/" target="_blank" rel="noopener">jaeddelosa.com</a></li>
+    </ul>
+    <div class="cta">
+      <a class="solid" href="https://jaeddelosa.com/book-a-discovery-call" target="_blank" rel="noopener">Book a 30-min call</a>
+      <a href="https://jaeddelosa.com/#portfolio" target="_blank" rel="noopener">View portfolio</a>
     </div>
-    <a href="https://www.linkedin.com/in/jaeddelosa/" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
-      🔗 Visit my LinkedIn Profile →
-    </a>
-    <div class="footer-note">
-      <a href="https://jaeddelosa.com/" target="_blank">jaeddelosa.com</a> – Home
+  </header>
+
+  <div class="body">
+    <div class="main">
+      <section>
+        <h2>Profile</h2>
+        <p>I started in 2020 as a writer and editor, producing SEO articles for publishers like TechReport and PC.Game and B2B campaign content for Callbox. Writing for search taught me how people actually find things online, and that curiosity kept pulling me toward the technical side. I took over a full website and its search strategy at Lifeologie Counseling, administered CRM workflows and supported security monitoring at Sonitan, and along the way earned a full-stack developer certification and completed a network administration bootcamp.</p>
+        <p style="margin-top:10px">Today I build conversion-focused websites, grow visibility on Google and in AI answer engines like ChatGPT and Perplexity (SEO and AEO), run Google Ads, and automate repetitive work with n8n, Claude Code, and MCP servers. The writing background never left: I still think first about what makes a person read, trust, and get in touch.</p>
+        <p class="path"><span>Writer &amp; editor <em>2020</em></span><span class="arrow">&rarr;</span><span>SEO content &amp; web management <em>2022</em></span><span class="arrow">&rarr;</span><span>Web dev, AEO &amp; AI automation <em>today</em></span></p>
+      </section>
+
+      <section>
+        <h2>What I Do</h2>
+        <ul class="competencies">
+          <li>Website Design &amp; Development<span>Fast, mobile-first sites built to convert</span></li>
+          <li>SEO &amp; AEO<span>Found on Google and recommended by AI tools</span></li>
+          <li>Google Ads &amp; Paid Search<span>Search and Maps campaigns, budget control</span></li>
+          <li>Workflow Automation &amp; AI<span>n8n pipelines, AI agents, app integrations</span></li>
+          <li>Content &amp; Copywriting<span>Web copy, articles, and guides that rank</span></li>
+          <li>Tracking &amp; Reporting<span>GA4, GTM, Looker Studio, plain-English reports</span></li>
+          <li>Social Media &amp; Meta Ads<span>Social as part of the sales funnel</span></li>
+          <li>CRM Administration<span>HubSpot and GoHighLevel workflows</span></li>
+        </ul>
+      </section>
+
+  <section>
+    <h2>Professional Experience</h2>
+
+    <div class="job">
+      <div class="job-head">
+        <div class="job-title">Website Content Manager <span class="org">| Lifeologie Counseling</span></div>
+        <div class="dates">Feb 2025 – Jul 2026</div>
+      </div>
+      <ul>
+        <li>Managed website content and information architecture, ensuring accuracy, consistency, and brand alignment across the site.</li>
+        <li>Improved organic visibility across traditional search engines and AI-powered search platforms through targeted SEO and generative-search optimization.</li>
+        <li>Developed and implemented SEO and conversion-focused content strategies to grow qualified traffic and lead generation.</li>
+        <li>Optimized on-page content, user experience, and content performance using analytics-driven insights.</li>
+      </ul>
     </div>
+
+    <div class="job">
+      <div class="job-head">
+        <div class="job-title">Administrative Support (APAC) <span class="org">| Sonitan LLC</span></div>
+        <div class="dates">Jan 2024 – Dec 2025</div>
+      </div>
+      <ul>
+        <li>Provided administrative and operations support across APAC business functions.</li>
+        <li>Administered CRM workflows in GoHighLevel (GHL), supporting pipeline management and day-to-day business processes.</li>
+        <li>Supported security operations monitoring using Wazuh.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-head">
+        <div class="job-title">B2B Content Writer <span class="org">| Callbox Inc.</span></div>
+        <div class="dates">Apr 2024 – Jan 2025</div>
+      </div>
+      <ul>
+        <li>Created B2B marketing and sales enablement content supporting SDR and Customer Success teams.</li>
+        <li>Produced lead-generation content for North American campaigns aligned to buyer-journey stages.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-head">
+        <div class="job-title">Customer Service Specialist <span class="org">| Transcom</span></div>
+        <div class="dates">Nov 2023 – Feb 2024</div>
+      </div>
+      <ul>
+        <li>Delivered customer support for Comcast Xfinity accounts, resolving billing, technical, and service inquiries.</li>
+        <li>Maintained quality and customer-satisfaction standards in a high-volume support environment.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-head">
+        <div class="job-title">SEO Content Writer <span class="org">| NicheStack / Improv Media</span></div>
+        <div class="dates">Mar 2023 – Nov 2023</div>
+      </div>
+      <ul>
+        <li>Produced SEO-optimized articles, reports, reviews, and how-to guides.</li>
+        <li>Applied keyword research and on-page optimization best practices; collaborated with editors on link-building initiatives.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-head">
+        <div class="job-title">SEO Content Writer <span class="org">| Finixio (TechReport)</span></div>
+        <div class="dates">Mar 2023 – Nov 2023</div>
+      </div>
+      <ul>
+        <li>Ghostwrote data-driven technology and industry-trend articles for a high-traffic publication.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-head">
+        <div class="job-title">Editor <span class="org">| Atheist Republic</span></div>
+        <div class="dates">May 2020 – Nov 2023</div>
+      </div>
+      <ul>
+        <li>Edited and reviewed digital content for publication, ensuring clarity, accuracy, and editorial standards.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-head">
+        <div class="job-title">SEO Content Writer <span class="org">| PC.Game</span></div>
+        <div class="dates">May 2022 – Mar 2023</div>
+      </div>
+      <ul>
+        <li>Created gaming content and optimized articles based on SEO recommendations and keyword strategy.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-head">
+        <div class="job-title">Online Tutor <span class="org">| Course Hero</span></div>
+        <div class="dates">May 2022 – Mar 2023</div>
+      </div>
+      <ul>
+        <li>Tutored students in Statistics, Philosophy, and Social Sciences.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-head">
+        <div class="job-title">Registration Screener / Enumerator <span class="org">| Philippine Statistics Authority</span></div>
+        <div class="dates">Jul 2020 – May 2022</div>
+      </div>
+      <ul>
+        <li>Supported national data collection and registration initiatives.</li>
+        <li>Coordinated with local government units and assisted field operations.</li>
+      </ul>
+    </div>
+  </section>
+
+      <section>
+        <h2>Selected Projects</h2>
+        <ul class="projects">
+          <li>
+            <div class="p-tag">Utility Web App</div>
+            <div class="p-name">FuelRoute PH</div>
+            <p class="p-desc">Trip-cost calculator for Filipino drivers using live pump prices and vehicle-specific fuel consumption.</p>
+            <a href="https://workwithme.jaeddelosa.com/fuelroute-ph/" target="_blank" rel="noopener">workwithme.jaeddelosa.com/fuelroute-ph</a>
+          </li>
+          <li>
+            <div class="p-tag">Civic Resource</div>
+            <div class="p-name">1RevU</div>
+            <p class="p-desc">Free reviewers for Civil Service, Teachers, and Nurse licensure exams: 15,467 practice items, offline-ready mock exams.</p>
+            <a href="http://1revu.jaed.fyi/" target="_blank" rel="noopener">1revu.jaed.fyi</a>
+          </li>
+          <li>
+            <div class="p-tag">Live Data Monitor</div>
+            <div class="p-name">WORLDWATCH</div>
+            <p class="p-desc">Live globe combining USGS, NASA EONET, and UN OCHA feeds with a 14-newsroom news wire.</p>
+            <a href="https://earth.jaeddelosa.com/" target="_blank" rel="noopener">earth.jaeddelosa.com</a>
+          </li>
+          <li>
+            <div class="p-tag">Open Data Initiative</div>
+            <div class="p-name">Open Data Gateway</div>
+            <p class="p-desc">Aggregates and normalizes Philippine public datasets into a queryable format for researchers and journalists.</p>
+            <a href="https://workwithme.jaeddelosa.com/odg/" target="_blank" rel="noopener">workwithme.jaeddelosa.com/odg</a>
+          </li>
+          <li>
+            <div class="p-tag">Data Application</div>
+            <div class="p-name">Stock Analyzer (US Markets)</div>
+            <p class="p-desc">Cloudflare Workers app with live quotes, charts, fundamentals, and news; no API key required.</p>
+            <a href="https://workwithme.jaeddelosa.com/us-stocks-analyzer/" target="_blank" rel="noopener">workwithme.jaeddelosa.com/us-stocks-analyzer</a>
+          </li>
+          <li>
+            <div class="p-tag">Automation</div>
+            <div class="p-name">n8n Workflow Templates</div>
+            <p class="p-desc">Ready-to-deploy workflows for email triage, cart recovery, CRM enrichment, content research, and invoicing.</p>
+            <a href="https://workwithme.jaeddelosa.com/n8n-templates/" target="_blank" rel="noopener">workwithme.jaeddelosa.com/n8n-templates</a>
+          </li>
+        </ul>
+      </section>
+    </div>
+
+    <aside>
+      <section>
+        <h2>Toolkit</h2>
+        <h3>Websites &amp; design</h3>
+        <ul class="skills"><li>WordPress</li><li>React</li><li>Shopify</li><li>Vue.js</li><li>JavaScript</li><li>Tailwind CSS</li><li>Figma</li></ul>
+        <h3>Search &amp; AI visibility</h3>
+        <ul class="skills"><li>Google Search Console</li><li>Ahrefs</li><li>SEMrush</li><li>Surfer SEO</li><li>Schema markup</li></ul>
+        <h3>Ads &amp; tracking</h3>
+        <ul class="skills"><li>Google Ads</li><li>GA4</li><li>Tag Manager</li><li>Looker Studio</li><li>Meta Ads Manager</li><li>LinkedIn Campaign Manager</li></ul>
+        <h3>Automation &amp; AI</h3>
+        <ul class="skills"><li>n8n</li><li>Claude Code</li><li>MCP servers</li><li>RAG pipelines</li><li>Make</li><li>LangChain</li><li>Ollama</li><li>HubSpot</li><li>GoHighLevel</li><li>Notion</li></ul>
+        <h3>Cloud &amp; code</h3>
+        <ul class="skills"><li>Cloudflare Workers / Pages</li><li>R2 / D1 / KV</li><li>Docker</li><li>Python</li><li>PostgreSQL</li><li>Git</li></ul>
+      </section>
+
+      <section>
+        <h2>Education</h2>
+        <ul class="plain-list">
+          <li><strong>Bachelor of Science in Sociology</strong><span class="meta">Caraga State University &middot; 2020</span></li>
+          <li><strong>Network Administration Bootcamp</strong><span class="meta">Logic Gate Technology Institute &middot; 2025</span></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Certifications</h2>
+        <ul class="skills">
+          <li>Certified Full Stack Developer</li>
+          <li>Introduction to Cybersecurity</li>
+          <li>LFS101: Introduction to Linux</li>
+          <li>Analytics for the Public Sector</li>
+          <li>Career Service Professional Eligibility</li>
+        </ul>
+      </section>
+
+      <section class="pub">
+        <h2>Publication</h2>
+        <p>Delosa, J. &ldquo;<em>Political Framing Strategies on Facebook Before the 2019 Philippine Senate Election: Implications on Discursive Practices Online.</em>&rdquo;</p>
+      </section>
+    </aside>
   </div>
+</main>
+
+<script>
+  const FILE_BASE = "Jaed-Delosa-Resume";
+
+  function saveBlob(content, type, filename) {
+    const blob = new Blob([content], { type });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  // Word-compatible .doc (opens in Microsoft Word, Google Docs, LibreOffice)
+  function downloadWord() {
+    const clone = document.getElementById("resume").cloneNode(true);
+    clone.querySelectorAll(".cta").forEach(el => el.remove());
+    const css = `
+      body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#0f172a;line-height:1.35}
+      .eyebrow{font-size:9pt;color:#4f46e5;text-transform:uppercase;letter-spacing:1pt}
+      h1{font-family:Arial,sans-serif;font-size:26pt;margin:0}
+      .headline{margin:4pt 0;color:#334155}
+      .contact{list-style:none;padding:0;margin:0;color:#64748b;font-size:10pt}
+      .contact li{display:inline;margin-right:12pt}
+      header{border-bottom:3px solid #4f46e5;padding-bottom:8pt;margin-bottom:6pt}
+      h2{font-size:11pt;text-transform:uppercase;letter-spacing:1pt;color:#4f46e5;border-bottom:1px solid #e2e8f0;margin:14pt 0 6pt}
+      h3{font-size:9.5pt;color:#64748b;margin:6pt 0 2pt}
+      .skills{padding-left:0;list-style:none;margin:0}
+      .skills li{display:inline;margin-right:4pt}
+      .skills li:after{content:" •"}
+      .competencies li span,.plain-list .meta{color:#64748b}
+      .competencies li span:before{content:" — "}
+      .job{margin-bottom:8pt}
+      .job-title{font-weight:bold}
+      .org{font-weight:normal;color:#4f46e5}
+      .dates{color:#64748b;font-size:10pt}
+      .p-tag{font-size:8.5pt;color:#4f46e5;text-transform:uppercase}
+      .p-name{font-weight:bold}
+      .plain-list{list-style:none;padding:0}
+      .plain-list .meta:before{content:" — "}
+      a{color:#4f46e5;text-decoration:none}`;
+    const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="utf-8"><title>Jaed Delosa — Resume</title><style>${css}</style></head>
+<body>${clone.innerHTML}</body></html>`;
+    saveBlob("﻿" + html, "application/msword", FILE_BASE + ".doc");
+  }
+
+  // Plain text version (good for ATS / copy-paste into job portals)
+  function downloadText() {
+    const r = document.getElementById("resume");
+    const lines = [];
+    const txt = el => el ? el.textContent.replace(/\s+/g, " ").trim() : "";
+
+    lines.push(txt(r.querySelector("h1")).toUpperCase());
+    lines.push(txt(r.querySelector(".headline")));
+    lines.push([...r.querySelectorAll(".contact li")].map(txt).join(" | "));
+
+    r.querySelectorAll("section").forEach(sec => {
+      lines.push("", txt(sec.querySelector("h2")).toUpperCase(), "");
+      const jobs = sec.querySelectorAll(".job");
+      if (jobs.length) {
+        jobs.forEach(job => {
+          lines.push(txt(job.querySelector(".job-title")) + " (" + txt(job.querySelector(".dates")) + ")");
+          job.querySelectorAll("li").forEach(li => lines.push("  - " + txt(li)));
+          lines.push("");
+        });
+      } else if (sec.querySelector(".projects")) {
+        sec.querySelectorAll(".projects li").forEach(li => {
+          lines.push(txt(li.querySelector(".p-name")) + " — " + txt(li.querySelector(".p-desc")) + " " + li.querySelector("a").href);
+        });
+      } else if (sec.querySelector(".competencies")) {
+        sec.querySelectorAll(".competencies li").forEach(li => {
+          const sub = txt(li.querySelector("span"));
+          lines.push("- " + txt(li).replace(sub, "").trim() + ": " + sub);
+        });
+      } else if (sec.querySelector("h3")) {
+        sec.querySelectorAll("h3").forEach(h => {
+          const list = h.nextElementSibling;
+          lines.push(txt(h) + ": " + [...list.querySelectorAll("li")].map(txt).join(", "));
+        });
+      } else if (sec.querySelector(".plain-list")) {
+        sec.querySelectorAll(".plain-list li").forEach(li =>
+          lines.push("- " + txt(li.querySelector("strong")) + " — " + txt(li.querySelector(".meta"))));
+      } else if (sec.querySelector(".skills")) {
+        lines.push([...sec.querySelectorAll(".skills li")].map(txt).join(" • "));
+      } else {
+        sec.querySelectorAll("p").forEach(p => lines.push(p.classList.contains("path")
+          ? "Career path: " + [...p.querySelectorAll("span:not(.arrow)")].map(txt).join(" → ")
+          : txt(p)));
+      }
+    });
+    saveBlob(lines.join("\n").replace(/\n{3,}/g, "\n\n").trim() + "\n", "text/plain;charset=utf-8", FILE_BASE + ".txt");
+  }
+</script>
 </body>
 </html>
