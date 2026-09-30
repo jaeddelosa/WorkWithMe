@@ -3512,7 +3512,7 @@
         <div class="footer-content">
             <div class="footer-brand">
                 <h3>Jaed Delosa</h3>
-                <p>I help growing businesses with the things that actually bring in customers: a website that works, getting found on Google and in AI tools, Google Ads, and automation that saves you hours every week.</p>
+                <p>I help growing businesses with the things that actually bring in customers: a website that works, getting found on Google and in AI tools, Google Ads, and automation that saves you hours every week. Based in Cebu, working with clients everywhere.</p>
                 <div class="social-links">
                     <a href="https://www.linkedin.com/in/jaeddelosa/" class="social-link" target="_blank"><i class="fab fa-linkedin-in"></i></a>
                     <a href="https://jaeddelosa.medium.com/" class="social-link" target="_blank"><i class="fab fa-medium"></i></a>
@@ -4654,7 +4654,6 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
         <div class="jdc-body">
             <div class="jdc-skel" id="jdc-skel" aria-hidden="true">
                 <span></span><span></span><span></span>
-                <p class="jdc-slow">Still loading. <a href="https://chat.jaeddelosa.com/" target="_blank" rel="noopener">Open the chat in a new tab</a></p>
             </div>
             <iframe class="jdc-frame" id="jdc-frame" title="Frontdesk chat"
                     data-src="https://chat.jaeddelosa.com/"
@@ -4684,12 +4683,19 @@ html.jdc-lock-big, html.jdc-lock-big body{ overflow:hidden; }
 
     function loadFrame() {
         if (frame.getAttribute('src')) return;
-        var slow = setTimeout(function () { skel.classList.add('jdc-is-slow'); }, 8000);
-        frame.addEventListener('load', function () {
-            clearTimeout(slow);
+        /* Show the chat as soon as it can be used. The iframe's "load" event waits
+           for everything in the chat page, including the lobby TV video, which can
+           take a long time. Waiting for it left the chat hidden behind a
+           "still loading, open in a new tab" message. */
+        var shown = false;
+        function reveal() {
+            if (shown) return;
+            shown = true;
             frame.classList.add('jdc-ready');
             setTimeout(function () { skel.style.display = 'none'; }, 350);
-        }, { once: true });
+        }
+        frame.addEventListener('load', reveal, { once: true });
+        setTimeout(reveal, 1500);
         frame.setAttribute('src', frame.getAttribute('data-src'));
     }
 
