@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://jaeddelosa.com/sitemap.xml
+Sitemap: https://jaeddelosa.com/sitemap-index.xml
+
+# Note: The following subdomains are blocked via their OWN robots.txt files
+# wfb-workspace.jaeddelosa.com
+# ww2.1crm.jaed-digital.jaeddelosa.com
+# ww2.application.tracker.jaeddelosa.com
+# password-generator.jaeddelosa.com
+# tradingview.jaeddelosa.com
+# free-seo-audit.jaeddelosa.com
+
+Host: jaeddelosa.com
