@@ -2,8 +2,8 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://jaeddelosa.com/sitemap.xml
-Sitemap: https://jaeddelosa.com/sitemap-index.xml
+Sitemap: https://workwithme.jaeddelosa.com/sitemap.xml
+Sitemap: https://workwithme.jaeddelosa.com/sitemap-index.xml
 
 # Note: The following subdomains are blocked via their OWN robots.txt files
 # wfb-workspace.jaeddelosa.com
