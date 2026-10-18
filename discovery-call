@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Book a Discovery Call | Jaed Delosa</title>
+<meta name="description" content="Book a free 30-minute call with Jaed Delosa about your website, Google and AI search visibility, or AI automation.">
+<link rel="preconnect" href="https://calendly.com">
+<link rel="preconnect" href="https://assets.calendly.com" crossorigin>
+<link rel="dns-prefetch" href="https://calendly.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1B1D20;--panel:#23262A;--rule:#33373D;--rule-2:#43484F;--text:#ECEAE6;--text-2:#B6B3AD;--text-3:#8E8B85;--primary:#3F6FB5;--accent:#9FBDE6;--ok:#5FBF77}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:'Hanken Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+body{min-height:100vh;display:flex;flex-direction:column;background:radial-gradient(900px 600px at 85% 10%,rgba(63,111,181,.16),transparent 60%),radial-gradient(700px 500px at 0% 100%,rgba(159,189,230,.06),transparent 60%),var(--bg)}
+a{color:inherit}
+.wrap{width:100%;max-width:1200px;margin:0 auto;padding:0 32px}
+header{border-bottom:1px solid var(--rule)}
+header .wrap{height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:700;font-size:1.05rem}
+.logo img{width:38px;height:38px;border-radius:8px;object-fit:cover;background:var(--panel)}
+.back{font-weight:600;font-size:.92rem;color:var(--text-2);text-decoration:none;border:1px solid var(--rule-2);padding:9px 16px;border-radius:4px;transition:color .15s,border-color .15s}
+.back:hover{color:var(--text);border-color:var(--accent)}
+main{flex:1}
+main .wrap{display:grid;grid-template-columns:400px minmax(0,1fr);gap:56px;padding-top:48px;padding-bottom:56px;align-items:start}
+.pill{display:inline-flex;align-items:center;gap:9px;padding:7px 14px;border:1px solid var(--rule-2);border-radius:999px;font-size:.84rem;color:var(--text-2);background:rgba(35,38,42,.6)}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--ok)}
+h1{margin:22px 0 14px;font-size:clamp(2.1rem,3.6vw,2.9rem);line-height:1.05;letter-spacing:-.035em;font-weight:800}
+h1 span{display:block;color:var(--text-3)}
+.lead{color:var(--text-2);font-size:1.06rem;line-height:1.6;max-width:30em}
+.cards{margin-top:28px;display:grid;gap:10px}
+.card{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border:1px solid var(--rule);border-radius:12px;background:rgba(35,38,42,.7)}
+.ic{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--rule-2);color:var(--accent)}
+.ic svg{width:17px;height:17px}
+.card b{display:block;font-weight:600;font-size:.98rem;margin-bottom:3px}
+.card p{color:var(--text-2);font-size:.9rem;line-height:1.5}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chips span{font-size:.82rem;color:var(--text-2);border:1px solid var(--rule-2);border-radius:999px;padding:4px 11px}
+.note{margin-top:22px;padding-top:18px;border-top:1px solid var(--rule);font-size:.86rem;color:var(--text-3);line-height:1.55}
+.note b{color:var(--text-2);font-weight:600}
+.cal{position:relative;border:1px solid rgba(159,189,230,.35);border-radius:18px;overflow:hidden;background:var(--panel);box-shadow:0 0 0 1px rgba(159,189,230,.08),0 30px 90px rgba(63,111,181,.18),0 24px 60px rgba(0,0,0,.45)}
+.cal-top{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--rule);font-size:.74rem;letter-spacing:.12em;color:var(--text-3);font-weight:600}
+.cal-top i{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--rule-2);margin-right:6px}
+.cal-body{position:relative;min-height:700px}
+.cal iframe{position:relative;z-index:1;display:block;width:100%;height:700px;border:0;opacity:0;transition:opacity .35s}
+.cal.ready iframe{opacity:1}
+.skel{position:absolute;inset:0;z-index:0;padding:28px;display:grid;grid-template-columns:1.15fr .85fr;gap:28px;transition:opacity .3s}
+.cal.ready .skel{opacity:0;pointer-events:none}
+.sk{background:linear-gradient(90deg,#2A2E33 0%,#33373D 50%,#2A2E33 100%);background-size:200% 100%;animation:sh 1.3s linear infinite;border-radius:6px}
+@keyframes sh{to{background-position:-200% 0}}
+.sk-days{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-top:22px}
+.sk-days .sk{aspect-ratio:1;border-radius:50%}
+.sk-times{display:grid;gap:10px;margin-top:22px}
+.sk-times .sk{height:44px;border-radius:8px}
+.skmsg{position:absolute;left:0;right:0;bottom:22px;text-align:center;font-size:.86rem;color:var(--text-3)}
+.fallback{display:none;padding:22px 18px;border-top:1px solid var(--rule);font-size:.9rem;color:var(--text-2)}
+.fallback a{color:var(--accent)}
+.slow .fallback{display:block}
+.done{display:none;padding:40px 28px;text-align:center}
+.done h2{font-size:1.5rem;letter-spacing:-.02em;margin-bottom:8px}
+.done p{color:var(--text-2)}
+.booked .done{display:block}.booked .cal-body{display:none}
+footer{border-top:1px solid var(--rule)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:18px;padding-bottom:22px;font-size:.82rem;color:var(--text-3)}
+footer a{color:var(--text-2);text-decoration:none}footer a:hover{color:var(--text)}
+@media(max-width:960px){main .wrap{grid-template-columns:1fr;gap:32px;padding-top:32px}}
+@media(max-width:600px){.wrap{padding:0 16px}header .wrap{height:62px}.logo span{font-size:.98rem}.back{padding:8px 12px;font-size:.86rem}
+.cal{border-radius:14px;margin:0 -6px}.cal-body{min-height:1000px}.cal iframe{height:1000px}.skel{grid-template-columns:1fr}.skel>div:last-child{display:none}}
+@media(prefers-reduced-motion:reduce){.sk{animation:none}.cal iframe,.skel{transition:none}}
+</style>
+<script>
+/* set up before the calendar frame exists, so a fast load is never missed */
+(function(){
+ var ready=false,q=[];
+ function el(id){return document.getElementById(id)}
+ window.__calReady=function(){if(ready)return;ready=true;var c=el('cal');if(c){c.classList.add('ready');c.classList.remove('slow')}};
+ window.addEventListener('message',function(e){
+  if(e.origin!=='https://calendly.com'||!e.data||typeof e.data.event!=='string')return;
+  var ev=e.data.event,c=el('cal'),f=el('cal-frame');
+  if(ev==='calendly.event_type_viewed'||ev==='calendly.profile_page_viewed')__calReady();
+  if(ev==='calendly.page_height'&&e.data.payload&&f){var h=parseInt(e.data.payload.height,10);if(h>300){f.style.height=h+'px';f.parentNode.style.minHeight=h+'px'}}
+  if(ev==='calendly.event_scheduled'&&c){c.classList.add('booked');try{typeof gtag==='function'&&gtag('event','book_call')}catch(x){}}
+ });
+ document.addEventListener('DOMContentLoaded',function(){
+  var tz=el('tz');try{var z=Intl.DateTimeFormat().resolvedOptions().timeZone;if(z&&tz)tz.textContent='Times show in your time zone ('+z.replace(/_/g,' ')+')'}catch(e){}
+  setTimeout(function(){var c=el('cal');if(!ready&&c)c.classList.add('slow')},8000);
+ });
+})();
+</script>
+</head>
+<body>
+<header><div class="wrap">
+ <a class="logo" href="https://workwithme.jaeddelosa.com/"><img src="https://workwithme.jaeddelosa.com/jed.jpeg" alt="" width="38" height="38"><span>Jaed Delosa</span></a>
+ <a class="back" href="https://workwithme.jaeddelosa.com/">Back to website</a>
+</div></header>
+
+<main><div class="wrap">
+ <section>
+  <span class="pill"><i></i>Available for new projects</span>
+  <h1>Let's talk.<span>Book 30 minutes.</span></h1>
+  <p class="lead">Pick a time that works for you. No back-and-forth emails.</p>
+  <div class="cards">
+   <div class="card"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg></span>
+    <div><b>What we'll cover</b><div class="chips"><span>Quick intro</span><span>Your goals</span><span>Next steps</span></div></div></div>
+   <div class="card"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+    <div><b>30 minutes</b><p>No rush, and no prep needed.</p></div></div>
+   <div class="card"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3"/></svg></span>
+    <div><b>Google Meet or Zoom</b><p>The video link is sent after you book.</p></div></div>
+  </div>
+  <p class="note">Usually replies within a few hours.<br><b id="tz">Times show in your time zone</b></p>
+ </section>
+
+ <section class="cal" id="cal" aria-label="Booking calendar">
+  <div class="cal-top"><span><i></i><i></i><i></i></span><span>CALENDLY · SECURE BOOKING</span><span style="width:45px"></span></div>
+  <div class="cal-body">
+   <div class="skel" aria-hidden="true">
+    <div><div class="sk" style="height:22px;width:55%"></div><div class="sk" style="height:14px;width:80%;margin-top:14px"></div>
+     <div class="sk-days"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div></div>
+    <div><div class="sk" style="height:22px;width:60%"></div><div class="sk-times"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div></div>
+    <p class="skmsg">Loading available times…</p>
+   </div>
+   <iframe id="cal-frame" onload="setTimeout(__calReady,1500)" title="Book a 30-minute call with Jaed Delosa" loading="eager" fetchpriority="high" allow="payment"
+    src="https://calendly.com/jaeddelosa/30min?embed_type=Inline&amp;embed_domain=jaeddelosa.com&amp;hide_landing_page_details=1&amp;hide_gdpr_banner=1&amp;background_color=23262a&amp;text_color=ecebe6&amp;primary_color=9fbde6"></iframe>
+  </div>
+  <p class="fallback">Taking a while? <a href="https://calendly.com/jaeddelosa/30min" target="_blank" rel="noopener">Open the calendar in a new tab</a>, or <a href="https://workwithme.jaeddelosa.com/#contact">send a message instead</a>.</p>
+  <div class="done" role="status"><h2>You're booked.</h2><p>Check your email for the confirmation and the video link. Talk soon.</p></div>
+ </section>
+</div></main>
+
+<footer><div class="wrap">
+ <span>© 2026 Jaed Delosa · 30 min · No account needed</span>
+ <span><a href="https://workwithme.jaeddelosa.com/">workwithme.jaeddelosa.com</a></span>
+</div></footer>
+
+
+</body>
+</html>
