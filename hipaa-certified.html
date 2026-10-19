@@ -1,0 +1,244 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>HIPAA Compliance Training Certificate</title>
+        <style>
+            @page {
+                size: landscape; /* Force landscape orientation */
+                margin: 0;
+            }
+            
+            body {
+                font-family: "Times New Roman", Times, serif;
+                max-width: 1000px; /* Increased for landscape */
+                margin: 0 auto;
+                padding: 40px;
+                border: 2px solid #333;
+                position: relative;
+                box-sizing: border-box;
+                background-color: #fff;
+                color: #333;
+            }
+            
+            .certificate-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+            
+            .certificate-logo {
+                width: 200px;
+                height: 60px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .certificate-logo img {
+                max-width: 100%;
+                max-height: 100%;
+            }
+            
+            .certificate-title {
+                font-size: 28px;
+                margin-bottom: 20px;
+                color: #1e40af;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                text-align: center;
+            }
+            
+            .certificate-body {
+                margin-bottom: 15px;
+                line-height: 1.6;
+                text-align: center;
+            }
+            
+            .certificate-body p {
+                font-size: 18px;
+                margin: 8px 0;
+            }
+            
+            .certificate-name {
+                font-size: 32px;
+                font-weight: bold;
+                margin: 15px 0;
+                color: #111;
+            }
+            
+            .certificate-date {
+                font-style: italic;
+            }
+            
+            .certificate-credit {
+                font-weight: bold;
+                font-size: 20px;
+                margin: 15px 0;
+                color: #1e40af;
+            }
+            
+            .certificate-details {
+                margin: 20px auto;
+                max-width: 80%;
+                text-align: center;
+                border: 1px solid #e5e7eb;
+                padding: 15px;
+                background-color: #f9fafb;
+                border-radius: 6px;
+            }
+            
+            .certificate-details p {
+                margin: 8px 0;
+                font-size: 16px;
+                line-height: 1.5;
+            }
+            
+            .certificate-dates {
+                display: flex;
+                justify-content: space-around;
+                margin: 20px 0;
+                font-style: italic;
+            }
+            
+            .certificate-dates div {
+                text-align: center;
+            }
+            
+            .certificate-dates span {
+                font-weight: bold;
+                font-style: normal;
+            }
+            
+            .certificate-id {
+                position: absolute;
+                bottom: 15px;
+                left: 40px;
+                font-size: 12px;
+                color: #6b7280;
+            }
+            
+            .certificate-signature {
+                margin-top: 30px;
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+                gap: 150px;
+            }
+            
+            .signature-element {
+                width: 200px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .student-signature {
+                width: 200px;
+            }
+            
+            .instructor-signature {
+                width: 200px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .instructor-signature img {
+                max-width: 150px;
+                max-height: 60px;
+                margin-bottom: 5px;
+                display: block;
+            }
+            
+            .signature-line {
+                width: 100%;
+                border-top: 1px solid #000;
+                padding-top: 5px;
+                text-align: center;
+                margin-top: auto;
+            }
+            
+            .certificate-seal {
+				position: absolute;
+				bottom: 60px; /* adjust this based on your preference */
+				right: 60px; /* adjust this based on your preference */
+				width: 100px; /* adjust size if necessary */
+				height: 100px; /* adjust size if necessary */
+				background-image: url("https://hipaatraining.us/images/official-seal.png");
+				background-size: contain;
+				background-position: bottom right; /* Change to bottom-right to align with the corner */
+				background-repeat: no-repeat;
+}
+
+            
+            @media print {
+                body {
+                    margin: 0;
+                    padding: 20px; /* Reduced padding */
+                    border: none;
+                    width: 11in; /* Letter width in landscape */
+                    height: 8.5in; /* Letter height in landscape */
+                    max-width: 100%;
+                    box-sizing: border-box;
+                    page-break-after: avoid;
+                    page-break-before: avoid;
+                }
+                
+                .certificate-header,
+                .certificate-body,
+                .certificate-signature,
+                .certificate-seal {
+                    page-break-inside: avoid;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="certificate-header">
+            <div class="certificate-logo">
+                <img src="https://hipaatraining.us/images/logo.png" alt="HIPAA Training Logo">
+            </div>
+        </div>
+        
+        <h1 class="certificate-title">Certificate of Completion</h1>
+        
+        <div class="certificate-body">
+            <p>This is to certify that</p>
+            <h2 class="certificate-name">Jaed Delosa</h2>
+            <p>has successfully completed the</p>
+            <h2>HIPAA Compliance Training Program</h2>
+            <p class="certificate-credit">0.5 Credit Hours</p>
+        </div>
+        
+        <div class="certificate-details">
+            <p>This course covered: Introduction to HIPAA, the Privacy Rule, the Security Rule, Breach Notification and Enforcement, and HIPAA Compliance Best Practices.</p>
+        </div>
+        
+        <div class="certificate-dates">
+            <div>
+                <p>Date of Issue: <span>October 18, 2026</span></p>
+            </div>
+            <div>
+                <p>Expiry Date: <span>October 18, 2027</span></p>
+            </div>
+        </div>
+        
+        <div class="certificate-signature">
+            <div class="signature-element student-signature">
+                <div class="signature-line">Student Signature</div>
+            </div>
+            <div class="signature-element instructor-signature">
+                <img src="https://hipaatraining.us/images/instructor-signature.png" alt="Instructor Signature">
+                <div class="signature-line">Carl B. Johnson<br>Instructor</div>
+            </div>
+        </div>
+        
+        <div class="certificate-id">Certificate ID: HIPAA-0147319</div>
+        
+        <div class="certificate-seal"></div>
+    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"0a7b66e86dea4ba0bdc8dcb084ee3d3f","r":1,"spa":2}' crossorigin="anonymous"></script>
+</body>
+    </html>
